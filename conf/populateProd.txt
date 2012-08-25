@@ -1,0 +1,11 @@
+Bionda Piccola|0|0|150
+Bionda Media|0|0|250
+Rossa Piccola|0|0|175
+Rossa Media|0|0|275
+Birra Speciale|0|0|400
+Acqua 0,5 Litro|0|0|100
+Acqua 1,5 Litri|0|0|150
+The Pesca|0|0|200
+The Limone|0|0|200
+Coca Cola|0|0|200
+Fanta|0|0|200

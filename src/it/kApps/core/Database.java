@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -127,7 +128,7 @@ public class Database {
 		this.connection.prepareStatement("SET DATABASE DEFAULT TABLE TYPE CACHED;").execute();
 		this.connection.prepareStatement("CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));").execute();
 		this.connection.prepareStatement("CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50), price INTEGER);")
-		.execute();
+				.execute();
 		this.connection.prepareStatement("CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);").execute();
 	}
 
@@ -142,6 +143,27 @@ public class Database {
 
 			while ((strLine = br.readLine()) != null) {
 				this.connection.prepareStatement("insert into " + tabName + "(name) values ('" + strLine + "');").execute();
+			}
+			// Close the input stream
+			in.close();
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+	}
+
+	public void populateProductsFromFile(String fileName) {
+		try {
+
+			FileInputStream fstream = new FileInputStream(fileName);
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+
+			while ((strLine = br.readLine()) != null) {
+				String[] params = strLine.split("|");
+				this.connection.prepareStatement("insert into products(name, cat, ingr, price) values ('" + params[0] + "','" + params[1] 
+						+ "','" + params[2] + "','" + params[3]+ "');").execute();
 				System.out.println("-- " + strLine);
 			}
 			// Close the input stream
@@ -160,6 +182,7 @@ public class Database {
 			System.out.println("Id: " + rs.getInt(1) + " Name: " + rs.getString(2));
 		}
 	}
+
 	public void doSomething() throws ClassNotFoundException, SQLException {
 		try {
 
@@ -272,6 +295,7 @@ public class Database {
 		d.connect();
 		d.tableStructureCreation();
 		d.populateFromFile("conf/populateCat.txt", "categories");
+		d.populateProductsFromFile("conf/populateProd.txt");
 		d.listTableValues("categories");
 		// d.doSomething();
 		d.stop();
