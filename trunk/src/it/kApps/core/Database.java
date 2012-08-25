@@ -67,7 +67,7 @@ public class Database {
 		// settings and data will be stored in files
 		// testdb.properties and testdb.script
 		hsqlServer.setDatabaseName(0, this.dbName);
-		hsqlServer.setDatabasePath(0, "file:" + fileName);
+		hsqlServer.setDatabasePath(0, "file:db/" + fileName);
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class Database {
 		// hsqlServer.stop();
 		// }
 		// }
-		Database d = new Database("xdb", "lib/testdb");
+		Database d = new Database("xdb", "testdb");
 		d.start();
 		d.connect();
 		d.tableStructureCreation();
