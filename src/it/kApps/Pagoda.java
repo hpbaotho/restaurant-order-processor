@@ -1,5 +1,6 @@
 package it.kApps;
 
+import it.kApps.GUI.GUI;
 import it.kApps.core.Console;
 
 public class Pagoda {
@@ -26,6 +27,7 @@ public class Pagoda {
 
 		new Console(null);
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				Pagoda.g = new GUI(TITLE);
 				Console.setGUI(g);

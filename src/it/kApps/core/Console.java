@@ -1,5 +1,6 @@
 package it.kApps.core;
 
+import it.kApps.GUI.GUI;
 
 public class Console {
 
@@ -12,7 +13,7 @@ public class Console {
 
 	private static GUI gui;
 
-	Console(GUI g) {
+	public Console(GUI g) {
 		gui = g;
 	}
 

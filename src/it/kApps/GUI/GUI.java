@@ -2,6 +2,18 @@ package it.kApps.GUI;
 
 import it.kApps.core.Console;
 
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Frame;
+import java.util.Hashtable;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
+
 public class GUI {
 
 	/**
@@ -36,7 +48,7 @@ public class GUI {
 		// mainFrame.setIconImage();
 		mainFrame.setSize(minX, minY);
 		// mainFrame.setLocationRelativeTo(null); //USED TO CENTER
-		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		// ########DEBUG
 		Console.println("[GUI] Creating the desktop content pane");
@@ -60,9 +72,9 @@ public class GUI {
 		JInternalFrame intFrame = new JInternalFrame("Console", true, true,
 				true, true);
 		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove
-																			// shadows
+		// shadows
 		intFrame.setSize(100, 50); // min size
-		intFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.desktop.add(intFrame);
 
 		// Create a scrolled text area.
