@@ -1,5 +1,17 @@
 package it.kApps.core;
 
+import java.awt.Component;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
 import org.hsqldb.Server;
 
 /**
@@ -23,7 +35,7 @@ public class Database {
 	/**
 	 * The name of the database
 	 */
-	private String dbName;
+	private final String dbName;
 
 	/**
 	 * Constructor.<br>
@@ -38,9 +50,9 @@ public class Database {
 	 */
 	public Database(String databaseName, String fileName) {
 		hsqlServer = null;
-		connection = null;
+		this.connection = null;
 
-		dbName = databaseName;
+		this.dbName = databaseName;
 
 		// Create a new database server class.
 		hsqlServer = new Server();
@@ -55,13 +67,13 @@ public class Database {
 		// The actual database will be named 'xdb' and its
 		// settings and data will be stored in files
 		// testdb.properties and testdb.script
-		hsqlServer.setDatabaseName(0, dbName);
+		hsqlServer.setDatabaseName(0, this.dbName);
 		hsqlServer.setDatabasePath(0, "file:" + fileName);
 	}
 
 	public void start() {
 		hsqlServer.start();
-		connection = null;
+		this.connection = null;
 	}
 
 	public void stop() {
@@ -74,7 +86,7 @@ public class Database {
 		// Getting a connection to the newly started database
 		Class.forName("org.hsqldb.jdbcDriver");
 		// Default user of the HSQLDB is 'sa' with an empty password
-		connection = DriverManager.getConnection(
+		this.connection = DriverManager.getConnection(
 				"jdbc:hsqldb:hsql://localhost/xdb", "sa", "");
 	}
 
@@ -104,20 +116,20 @@ public class Database {
 		if (!okcancel("Maybe you are deleting all the old database. Sure?")) {
 			return;
 		}
-		connection.prepareStatement("DROP SCHEMA PUBLIC CASCADE").execute();
-		connection.prepareStatement("SET DATABASE DEFAULT TABLE TYPE CACHED;")
+		this.connection.prepareStatement("DROP SCHEMA PUBLIC CASCADE").execute();
+		this.connection.prepareStatement("SET DATABASE DEFAULT TABLE TYPE CACHED;")
+		.execute();
+		this.connection
+		.prepareStatement(
+				"CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));")
 				.execute();
-		connection
-				.prepareStatement(
-						"CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));")
+		this.connection
+		.prepareStatement(
+				"CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50));")
 				.execute();
-		connection
-				.prepareStatement(
-						"CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50));")
-				.execute();
-		connection
-				.prepareStatement(
-						"CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);")
+		this.connection
+		.prepareStatement(
+				"CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);")
 				.execute();
 	}
 
@@ -153,13 +165,13 @@ public class Database {
 			// with SELECT query.
 			// connection.prepareStatement("drop table testtable;").execute();
 			// connection.prepareStatement("create table testtable ( id INTEGER, name VARCHAR(11));").execute();
-			connection.prepareStatement(
+			this.connection.prepareStatement(
 					"insert into cat(name) values ('testvalue');").execute();
-			connection.prepareStatement(
+			this.connection.prepareStatement(
 					"insert into cat(name) values ('testvalue');").execute();
 			// connection.prepareStatement("insert into testtable(id, name) values (2, 'testvalue');").execute();
 			// connection.prepareStatement("insert into testtable(id, name) values (3, 'testvalue');").execute();
-			ResultSet rs = connection.prepareStatement("select * from cat;")
+			ResultSet rs = this.connection.prepareStatement("select * from cat;")
 					.executeQuery();
 
 			// Checking if the data is correct
@@ -168,19 +180,19 @@ public class Database {
 				System.out.println("Id: " + rs.getInt(1) + " Name: "
 						+ rs.getString(2));
 			}
-			connection.prepareStatement("drop table cat;").execute();
+			this.connection.prepareStatement("drop table cat;").execute();
 
 		} finally {
 			// Closing the connection
-			if (connection != null) {
-				connection.close();
+			if (this.connection != null) {
+				this.connection.close();
 			}
 			this.stop();
 		}
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException,
-			SQLException {
+	SQLException {
 		//
 		// // 'Server' is a class of HSQLDB representing
 		// // the database server
