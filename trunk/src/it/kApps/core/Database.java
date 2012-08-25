@@ -25,25 +25,24 @@ public class Database {
 	/**
 	 * The database server class
 	 */
-	private static Server hsqlServer;
+	private static Server	hsqlServer;
 
 	/**
 	 * The connection class. Used to manage request to the database.
 	 */
-	private Connection connection;
+	private Connection		connection;
 
 	/**
 	 * The name of the database
 	 */
-	private final String dbName;
+	private final String	dbName;
 
 	/**
 	 * Constructor.<br>
-	 * Create a new <code>Database</code> connected to a specified hsqldb and
-	 * saved in a specified file.<br>
+	 * Create a new <code>Database</code> connected to a specified hsqldb and saved in a specified file.<br>
 	 * Defaults sets logs to null e logWriter to null.
 	 * 
-	 * @param dbName
+	 * @param databaseName
 	 *            The name of the database to connect
 	 * @param fileName
 	 *            The name of the file where the database is saved.
@@ -71,29 +70,39 @@ public class Database {
 		hsqlServer.setDatabasePath(0, "file:" + fileName);
 	}
 
+	/**
+	 * Start the new database class.
+	 */
 	public void start() {
 		hsqlServer.start();
 		this.connection = null;
 	}
 
+	/**
+	 * Stop the database class.
+	 */
 	public void stop() {
 		if (hsqlServer != null) {
 			hsqlServer.stop();
 		}
 	}
 
+	/**
+	 * Start the new connection to the specified database, using the default username "sa" e no password
+	 * 
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public void connect() throws ClassNotFoundException, SQLException {
 		// Getting a connection to the newly started database
 		Class.forName("org.hsqldb.jdbcDriver");
 		// Default user of the HSQLDB is 'sa' with an empty password
-		this.connection = DriverManager.getConnection(
-				"jdbc:hsqldb:hsql://localhost/xdb", "sa", "");
+		this.connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/xdb", "sa", "");
 	}
 
 	// ############################################################
 	public static boolean okcancel(String theMessage) {
-		int result = JOptionPane.showConfirmDialog((Component) null,
-				theMessage, "alert", JOptionPane.OK_CANCEL_OPTION);
+		int result = JOptionPane.showConfirmDialog((Component) null, theMessage, "alert", JOptionPane.OK_CANCEL_OPTION);
 		if (result == 0) {
 			return true;
 		} else {
@@ -105,55 +114,53 @@ public class Database {
 
 	/**
 	 * Create the basic structure of the database if necessary.<br>
-	 * This must be called only once, although the database and all the data in
-	 * it will be lost.
+	 * This must be called only once, otherwise the database and all the data in it will be lost.
 	 * 
 	 * TODO read the structure from an XML
 	 * 
 	 * @throws SQLException
 	 */
-	public void structureCreation() throws SQLException {
+	public void tableStructureCreation() throws SQLException {
 		if (!okcancel("Maybe you are deleting all the old database. Sure?")) {
 			return;
 		}
 		this.connection.prepareStatement("DROP SCHEMA PUBLIC CASCADE").execute();
-		this.connection.prepareStatement("SET DATABASE DEFAULT TABLE TYPE CACHED;")
+		this.connection.prepareStatement("SET DATABASE DEFAULT TABLE TYPE CACHED;").execute();
+		this.connection.prepareStatement("CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));").execute();
+		this.connection.prepareStatement("CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50), price INTEGER);")
 		.execute();
-		this.connection
-		.prepareStatement(
-				"CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));")
-				.execute();
-		this.connection
-		.prepareStatement(
-				"CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50));")
-				.execute();
-		this.connection
-		.prepareStatement(
-				"CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);")
-				.execute();
+		this.connection.prepareStatement("CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);").execute();
 	}
 
-	public void populateFromFile(String fileName) {
+	public void populateFromFile(String fileName, String tabName) {
 		try {
-			// Open the file that is the first
-			// command line parameter
+
 			FileInputStream fstream = new FileInputStream(fileName);
 			// Get the object of DataInputStream
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
-			// Read File Line By Line
+
 			while ((strLine = br.readLine()) != null) {
-				// Print the content on the console
-				System.out.println(strLine);
+				this.connection.prepareStatement("insert into " + tabName + "(name) values ('" + strLine + "');").execute();
+				System.out.println("-- " + strLine);
 			}
 			// Close the input stream
 			in.close();
-		} catch (Exception e) {// Catch exception if any
+		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
 	}
 
+	public void listTableValues(String table) throws SQLException {
+		ResultSet rs = this.connection.prepareStatement("select * from " + table + ";").executeQuery();
+
+		// Checking if the data is correct
+		while (!rs.isLast()) {
+			rs.next();
+			System.out.println("Id: " + rs.getInt(1) + " Name: " + rs.getString(2));
+		}
+	}
 	public void doSomething() throws ClassNotFoundException, SQLException {
 		try {
 
@@ -165,20 +172,16 @@ public class Database {
 			// with SELECT query.
 			// connection.prepareStatement("drop table testtable;").execute();
 			// connection.prepareStatement("create table testtable ( id INTEGER, name VARCHAR(11));").execute();
-			this.connection.prepareStatement(
-					"insert into cat(name) values ('testvalue');").execute();
-			this.connection.prepareStatement(
-					"insert into cat(name) values ('testvalue');").execute();
+			this.connection.prepareStatement("insert into cat(name) values ('testvalue');").execute();
+			this.connection.prepareStatement("insert into cat(name) values ('testvalue');").execute();
 			// connection.prepareStatement("insert into testtable(id, name) values (2, 'testvalue');").execute();
 			// connection.prepareStatement("insert into testtable(id, name) values (3, 'testvalue');").execute();
-			ResultSet rs = this.connection.prepareStatement("select * from cat;")
-					.executeQuery();
+			ResultSet rs = this.connection.prepareStatement("select * from cat;").executeQuery();
 
 			// Checking if the data is correct
 			while (!rs.isLast()) {
 				rs.next();
-				System.out.println("Id: " + rs.getInt(1) + " Name: "
-						+ rs.getString(2));
+				System.out.println("Id: " + rs.getInt(1) + " Name: " + rs.getString(2));
 			}
 			this.connection.prepareStatement("drop table cat;").execute();
 
@@ -191,8 +194,7 @@ public class Database {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException,
-	SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		//
 		// // 'Server' is a class of HSQLDB representing
 		// // the database server
@@ -269,7 +271,9 @@ public class Database {
 		Database d = new Database("xdb", "lib/testdb");
 		d.start();
 		d.connect();
-		d.structureCreation();
+		d.tableStructureCreation();
+		d.populateFromFile("conf/populateCat.txt", "categories");
+		d.listTableValues("categories");
 		// d.doSomething();
 		d.stop();
 	}
