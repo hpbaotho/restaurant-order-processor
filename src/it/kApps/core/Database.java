@@ -63,7 +63,6 @@ public class Database {
 		hsqlServer.setLogWriter(null);
 		hsqlServer.setSilent(true);
 
-		// The actual database will be named 'xdb' and its
 		// settings and data will be stored in files
 		// testdb.properties and testdb.script
 		hsqlServer.setDatabaseName(0, this.dbName);
