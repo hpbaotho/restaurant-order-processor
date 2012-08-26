@@ -81,8 +81,13 @@ public class Database {
 
 	/**
 	 * Stop the database class.
+	 * 
+	 * @throws SQLException
 	 */
-	public void stop() {
+	public void stop() throws SQLException {
+		if (this.connection != null) {
+			this.connection.close();
+		}
 		if (hsqlServer != null) {
 			hsqlServer.stop();
 		}
@@ -174,40 +179,31 @@ public class Database {
 		}
 	}
 
-	public void listTableColumns(String table) throws SQLException {
-		String[] s = null;
-		ResultSet rs =
-				this.connection.prepareStatement("select column_name from information_schema.columns where table_name = '"+
-						table +"' order by ordinal_position;").executeQuery();
-		while (!rs.isLast()){
-			rs.next();
-			// s[i] = rs.getString(i);
-			System.out.println(rs.getString("column_name"));
+	public ArrayList<String> listTableColumns(String table) throws SQLException {
+		ArrayList<String> columnNames = new ArrayList<String>();
+		ResultSet rsColumns = this.connection.prepareStatement(
+				"SELECT COLUMN_NAME, TYPE_NAME, COLUMN_SIZE, IS_NULLABLE FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME = '" + table.toUpperCase()
+						+ "'").executeQuery();
+		int i = 0;
+		while (rsColumns.next()) {
+			columnNames.add(rsColumns.getString("COLUMN_NAME"));
+			System.out.println("column name=" + columnNames.get(i));
+			String columnType = rsColumns.getString("TYPE_NAME");
+			System.out.println("type:" + columnType);
+			int size = rsColumns.getInt("COLUMN_SIZE");
+			System.out.println("size:" + size);
+			// int nullable = rsColumns.getInt("IS_NULLABLE");
+			// if (nullable == DatabaseMetaData.columnNullable) {
+			// System.out.println("nullable true");
+			// } else {
+			// System.out.println("nullable false");
+			// }
+			// int position = rsColumns.getInt("ORDINAL_POSITION");
+			// System.out.println("position:" + position);
+			i++;
+
 		}
-//		ResultSet rsColumns = null;
-//		DatabaseMetaData meta = connection.getMetaData();
-//		rsColumns = meta.getColumns(null, null, table, null);
-//		int i = 0;
-//		while (!rsColumns.isLast()) {
-//			rsColumns..next();
-//			s[i] = rsColumns.getString("COLUMN_NAME");
-//			System.out.println("column name=" + s[i]);
-//			String columnType = rsColumns.getString("TYPE_NAME");
-//			System.out.println("type:" + columnType);
-//			int size = rsColumns.getInt("COLUMN_SIZE");
-//			System.out.println("size:" + size);
-//			int nullable = rsColumns.getInt("NULLABLE");
-//			if (nullable == DatabaseMetaData.columnNullable) {
-//				System.out.println("nullable true");
-//			} else {
-//				System.out.println("nullable false");
-//			}
-//			int position = rsColumns.getInt("ORDINAL_POSITION");
-//			System.out.println("position:" + position);
-//			i++;
-//
-//		}
-		// return s;
+		return columnNames;
 	}
 
 	public void listTableValues(String table) throws SQLException {
@@ -333,8 +329,8 @@ public class Database {
 		d.tableStructureCreation();
 		d.populateFromFile("conf/populateCat.txt", "categories");
 		d.populateProductsFromFile("conf/populateProd.txt");
-		d.listTableValues("categories");
-		d.listTableColumns("categories");
+		d.listTableValues("products");
+		d.listTableColumns("products");
 		// d.doSomething();
 		d.stop();
 	}
