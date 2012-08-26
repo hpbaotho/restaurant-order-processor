@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -161,16 +162,52 @@ public class Database {
 			String strLine;
 
 			while ((strLine = br.readLine()) != null) {
-				String[] params = strLine.split("|");
-				this.connection.prepareStatement("insert into products(name, cat, ingr, price) values ('" + params[0] + "','" + params[1] 
-						+ "','" + params[2] + "','" + params[3]+ "');").execute();
-				System.out.println("-- " + strLine);
+				String[] params = strLine.split("!");
+				this.connection.prepareStatement(
+						"insert into products(name, cat, ingr, price) values ('" + params[0] + "'," + params[1] + ",'" + params[2] + "'," + params[3] + ");")
+						.execute();
 			}
 			// Close the input stream
 			in.close();
 		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace();
 		}
+	}
+
+	public void listTableColumns(String table) throws SQLException {
+		String[] s = null;
+		ResultSet rs =
+				this.connection.prepareStatement("select column_name from information_schema.columns where table_name = '"+
+						table +"' order by ordinal_position;").executeQuery();
+		while (!rs.isLast()){
+			rs.next();
+			// s[i] = rs.getString(i);
+			System.out.println(rs.getString("column_name"));
+		}
+//		ResultSet rsColumns = null;
+//		DatabaseMetaData meta = connection.getMetaData();
+//		rsColumns = meta.getColumns(null, null, table, null);
+//		int i = 0;
+//		while (!rsColumns.isLast()) {
+//			rsColumns..next();
+//			s[i] = rsColumns.getString("COLUMN_NAME");
+//			System.out.println("column name=" + s[i]);
+//			String columnType = rsColumns.getString("TYPE_NAME");
+//			System.out.println("type:" + columnType);
+//			int size = rsColumns.getInt("COLUMN_SIZE");
+//			System.out.println("size:" + size);
+//			int nullable = rsColumns.getInt("NULLABLE");
+//			if (nullable == DatabaseMetaData.columnNullable) {
+//				System.out.println("nullable true");
+//			} else {
+//				System.out.println("nullable false");
+//			}
+//			int position = rsColumns.getInt("ORDINAL_POSITION");
+//			System.out.println("position:" + position);
+//			i++;
+//
+//		}
+		// return s;
 	}
 
 	public void listTableValues(String table) throws SQLException {
@@ -297,6 +334,7 @@ public class Database {
 		d.populateFromFile("conf/populateCat.txt", "categories");
 		d.populateProductsFromFile("conf/populateProd.txt");
 		d.listTableValues("categories");
+		d.listTableColumns("categories");
 		// d.doSomething();
 		d.stop();
 	}
