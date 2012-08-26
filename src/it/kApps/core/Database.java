@@ -58,10 +58,8 @@ public class Database {
 		// Create a new database server class.
 		hsqlServer = new Server();
 
-		// HSQLDB prints out a lot of informations when starting and closing,
-		// which we don't need now.
-		// Normally you should point the setLogWriter to some Writer object that
-		// could store the logs.
+		// HSQLDB prints out a lot of informations when starting and closing, which we don't need now.
+		// Normally you should point the setLogWriter to some Writer object that could store the logs.
 		hsqlServer.setLogWriter(null);
 		hsqlServer.setSilent(true);
 
@@ -146,9 +144,20 @@ public class Database {
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
-
+			ArrayList<String> columns = this.listTableColumns(tabName);
 			while ((strLine = br.readLine()) != null) {
-				this.connection.prepareStatement("insert into " + tabName + "(name) values ('" + strLine + "');").execute();
+				if (columns.size() == strLine.split("!").length) {
+					String[] lineSplitted = strLine.split("!");
+					String names = "";
+					String values = "";
+					for (int i = 0; i < columns.size(); i++) {
+						names += columns.get(i) + ",";
+						values += "'" + lineSplitted[i] + "',";
+					}
+					this.connection.prepareStatement(
+							"insert into " + tabName + "(" + names.substring(0, names.length() - 1) + ") values (" + values.substring(0, values.length() - 1)
+									+ ");").execute();
+				}
 			}
 			// Close the input stream
 			in.close();
@@ -157,51 +166,16 @@ public class Database {
 		}
 	}
 
-	public void populateProductsFromFile(String fileName) {
-		try {
-
-			FileInputStream fstream = new FileInputStream(fileName);
-			// Get the object of DataInputStream
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-
-			while ((strLine = br.readLine()) != null) {
-				String[] params = strLine.split("!");
-				this.connection.prepareStatement(
-						"insert into products(name, cat, ingr, price) values ('" + params[0] + "'," + params[1] + ",'" + params[2] + "'," + params[3] + ");")
-						.execute();
-			}
-			// Close the input stream
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public ArrayList<String> listTableColumns(String table) throws SQLException {
 		ArrayList<String> columnNames = new ArrayList<String>();
 		ResultSet rsColumns = this.connection.prepareStatement(
-				"SELECT COLUMN_NAME, TYPE_NAME, COLUMN_SIZE, IS_NULLABLE FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME = '" + table.toUpperCase()
-						+ "'").executeQuery();
-		int i = 0;
+				"SELECT COLUMN_NAME, TYPE_NAME, COLUMN_SIZE FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME = '" + table.toUpperCase()
+						+ "' AND COLUMN_NAME NOT LIKE 'ID' ORDER BY ORDINAL_POSITION").executeQuery();
 		while (rsColumns.next()) {
 			columnNames.add(rsColumns.getString("COLUMN_NAME"));
-			System.out.println("column name=" + columnNames.get(i));
-			String columnType = rsColumns.getString("TYPE_NAME");
-			System.out.println("type:" + columnType);
-			int size = rsColumns.getInt("COLUMN_SIZE");
-			System.out.println("size:" + size);
-			// int nullable = rsColumns.getInt("IS_NULLABLE");
-			// if (nullable == DatabaseMetaData.columnNullable) {
-			// System.out.println("nullable true");
-			// } else {
-			// System.out.println("nullable false");
-			// }
+			// String columnType = rsColumns.getString("TYPE_NAME");
+			// int size = rsColumns.getInt("COLUMN_SIZE");
 			// int position = rsColumns.getInt("ORDINAL_POSITION");
-			// System.out.println("position:" + position);
-			i++;
-
 		}
 		return columnNames;
 	}
@@ -328,7 +302,7 @@ public class Database {
 		d.connect();
 		d.tableStructureCreation();
 		d.populateFromFile("conf/populateCat.txt", "categories");
-		d.populateProductsFromFile("conf/populateProd.txt");
+		d.populateFromFile("conf/populateProd.txt", "products");
 		d.listTableValues("products");
 		d.listTableColumns("products");
 		// d.doSomething();
