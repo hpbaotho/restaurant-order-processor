@@ -45,8 +45,14 @@ public class Menu implements ActionListener, ItemListener {
 	 * Each check-box in the menu
 	 */
 	private JCheckBoxMenuItem cbMenuItem;
+	
+	private GUI gui;
 
 	private static final String NEW_LINE = "\n";
+	
+	public Menu (GUI g){
+		gui = g;
+	}
 
 	public JMenuBar createMenuBar() {
 
@@ -132,7 +138,7 @@ public class Menu implements ActionListener, ItemListener {
 		this.menu.addSeparator();
 
 		this.cbMenuItem = new JCheckBoxMenuItem("Console");
-		if (GUI.getIntFrameList().get("Console").isVisible()) {
+		if (gui.getIntFrames().get("Console").isVisible()) {
 			this.cbMenuItem.setSelected(true);
 		} else {
 			this.cbMenuItem.setSelected(false);
@@ -183,6 +189,7 @@ public class Menu implements ActionListener, ItemListener {
 		if (action.equalsIgnoreCase("exit")) {
 			System.exit(0);
 		}
+		gui.createCochiPane();
 		String s = "Action event detected." + NEW_LINE + "    Event source: "
 				+ source.getText() + " (an instance of "
 				+ this.getClassName(source) + ")";
@@ -195,9 +202,9 @@ public class Menu implements ActionListener, ItemListener {
 		JMenuItem source = (JMenuItem) (e.getSource());
 		if (source.getText().equalsIgnoreCase("console")) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				GUI.getIntFrameList().get("Console").setVisible(true);
+				gui.getIntFrames().get("Console").setVisible(true);
 			} else {
-				GUI.getIntFrameList().get("Console").setVisible(false);
+				gui.getIntFrames().get("Console").setVisible(false);
 			}
 		}
 		String s = "Item event detected."
