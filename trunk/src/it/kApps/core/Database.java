@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -132,7 +131,7 @@ public class Database {
 		this.connection.prepareStatement("SET DATABASE DEFAULT TABLE TYPE CACHED;").execute();
 		this.connection.prepareStatement("CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));").execute();
 		this.connection.prepareStatement("CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50), price INTEGER);")
-				.execute();
+		.execute();
 		this.connection.prepareStatement("CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);").execute();
 	}
 
@@ -156,7 +155,7 @@ public class Database {
 					}
 					this.connection.prepareStatement(
 							"insert into " + tabName + "(" + names.substring(0, names.length() - 1) + ") values (" + values.substring(0, values.length() - 1)
-									+ ");").execute();
+							+ ");").execute();
 				}
 			}
 			// Close the input stream
@@ -170,7 +169,7 @@ public class Database {
 		ArrayList<String> columnNames = new ArrayList<String>();
 		ResultSet rsColumns = this.connection.prepareStatement(
 				"SELECT COLUMN_NAME, TYPE_NAME, COLUMN_SIZE FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME = '" + table.toUpperCase()
-						+ "' AND COLUMN_NAME NOT LIKE 'ID' ORDER BY ORDINAL_POSITION").executeQuery();
+				+ "' AND COLUMN_NAME NOT LIKE 'ID' ORDER BY ORDINAL_POSITION").executeQuery();
 		while (rsColumns.next()) {
 			columnNames.add(rsColumns.getString("COLUMN_NAME"));
 			// String columnType = rsColumns.getString("TYPE_NAME");
@@ -180,14 +179,16 @@ public class Database {
 		return columnNames;
 	}
 
-	public void listTableValues(String table) throws SQLException {
+	public ArrayList<String> listTableValues(String table) throws SQLException {
+		ArrayList<String> values = new ArrayList<String>();
 		ResultSet rs = this.connection.prepareStatement("select * from " + table + ";").executeQuery();
-
 		// Checking if the data is correct
 		while (!rs.isLast()) {
 			rs.next();
+			values.add(rs.getString(2));
 			System.out.println("Id: " + rs.getInt(1) + " Name: " + rs.getString(2));
 		}
+		return values;
 	}
 
 	public void doSomething() throws ClassNotFoundException, SQLException {
