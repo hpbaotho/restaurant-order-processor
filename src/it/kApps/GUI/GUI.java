@@ -3,7 +3,6 @@ package it.kApps.GUI;
 import it.kApps.core.Console;
 
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.util.Hashtable;
@@ -58,17 +57,18 @@ public class GUI {
 
 		this.desktop = new JDesktopPane();
 		mainFrame.setContentPane(this.desktop);
-		
+
 		JButton btt = new JButton("button");
 		btt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                convertButtonActionPerformed(evt);
-            }
-        });
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				GUI.this.convertButtonActionPerformed(evt);
+			}
+		});
 		mainFrame.add(btt);
 		btt.setSize(100,100);
 		btt.setVisible(true);
-		
+
 		this.createConsolePane();
 		this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
@@ -80,12 +80,12 @@ public class GUI {
 
 		mainFrame.setVisible(true);
 	}
-	
+
 	private void convertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convertButtonActionPerformed
 		//Parse degrees Celsius as a double and convert to Fahrenheit
-		        Console.println(Console.center("schiacciato"));
-		    }
-	
+		Console.println(Console.center("schiacciato"));
+	}
+
 	public Container createConsolePane() {
 
 		JInternalFrame intFrame = new JInternalFrame("Console", true, true, true, true);
@@ -108,25 +108,25 @@ public class GUI {
 		intFrame.pack();
 		intFrame.setVisible(true);
 		intFrames.put("Console", intFrame);
-		
-//		mainFrame.repaint();
+
+		//		mainFrame.repaint();
 
 		return this.desktop;
 	}
-	
+
 	public void writeInConsole(String msg) {
 		this.output.append(msg);
 		this.output.setCaretPosition(this.output.getDocument().getLength());
 	}
-	
+
 	public int getConsoleWidth(){
-		output.repaint();
+		this.output.repaint();
 		return this.output.getColumns();
 	}
 
 	public Container createCochiPane() {
-		
-		System.out.println("called");
+
+		System.out.println("called2");
 		JInternalFrame intFrame = new JInternalFrame("Cochi", true, true, true, true);
 		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove
 		// shadows
@@ -147,7 +147,22 @@ public class GUI {
 		intFrame.pack();
 		intFrame.setVisible(true);
 		intFrames.put("Cochi", intFrame);
-		
+
+		mainFrame.repaint();
+
+		return this.desktop;
+	}
+
+	public Container createCashDeskPane() {
+
+		System.out.println("called");
+		CashDeskFrame intFrame = new CashDeskFrame();
+		this.desktop.add(intFrame);
+
+		// intFrame.pack();
+		intFrame.setVisible(true);
+		intFrames.put("CashDesk", intFrame);
+
 		mainFrame.repaint();
 
 		return this.desktop;
