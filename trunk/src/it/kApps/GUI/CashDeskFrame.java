@@ -8,10 +8,17 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.print.PrintService;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.MediaPrintableArea;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -34,6 +42,7 @@ public class CashDeskFrame extends JInternalFrame {
 
 	private Hashtable<String, JButton>	buttons;
 	private final Database					d;
+	private JTextPane					textPane;
 
 	/**
 	 * Main constructor, create the frame with each button for each product.
@@ -68,7 +77,6 @@ public class CashDeskFrame extends JInternalFrame {
 					JLabel lbl = new JLabel(cat.get(i));
 					p.add(lbl);
 					lbl.setFont(new Font("Broadway", Font.BOLD, 24));
-					// lbl.setBounds(10 + 200 * i + 5 * i, 5, 200, dl.height);
 					lbl.setHorizontalAlignment(SwingConstants.CENTER);
 					lbl.setMaximumSize(new Dimension(400, 30));
 					lbl.setVisible(true);
@@ -87,12 +95,6 @@ public class CashDeskFrame extends JInternalFrame {
 								CashDeskFrame.this.convertButtonActionPerformed(evt);
 							}
 						});
-						// if (this.getHeight() < (btt.getY() + btt.getHeight() + 5)) {
-						// this.setSize(this.getWidth(), btt.getY() + btt.getHeight() + 27);
-						// }
-						// if (this.getWidth() < (btt.getX() + btt.getWidth())) {
-						// this.setSize(btt.getX() + btt.getWidth() + 5, this.getHeight());
-						// }
 					}
 					p.add(Box.createRigidArea(new Dimension(0, 5)));
 					if (bts.size() < 12) {
@@ -152,13 +154,14 @@ public class CashDeskFrame extends JInternalFrame {
 			JPanel other = new JPanel();
 			other.setLayout(new BoxLayout(other, BoxLayout.PAGE_AXIS));
 
-			JTextPane textPane = new JTextPane();
-			textPane.setMargin(new Insets(10, 10, 10, 10));
-			StyledDocument doc = textPane.getStyledDocument();
-			JScrollPane scroll = new JScrollPane(textPane);
 			Dimension dim = new Dimension(350, 600);
+			this.textPane = new JTextPane();
+			this.textPane.setMargin(new Insets(10, 10, 10, 10));
+			this.textPane.setSize(dim);
+			StyledDocument doc = this.textPane.getStyledDocument();
+
+			JScrollPane scroll = new JScrollPane(this.textPane);
 			scroll.setMaximumSize(dim);
-			// scroll.setMinimumSize(dim);
 			scroll.setPreferredSize(dim);
 			scroll.setBorder(BorderFactory.createLineBorder(Color.black));
 			scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -166,6 +169,12 @@ public class CashDeskFrame extends JInternalFrame {
 			this.addStylesToDocument(doc);
 
 			try {
+				doc.setParagraphAttributes(0, doc.getLength(), doc.getStyle("blue"), false);
+				doc.setLogicalStyle(doc.getLength(), doc.getStyle("center"));
+				doc.insertString(doc.getLength(), "FESTA CON NOI 2012\n", doc.getStyle("regular"));
+				doc.insertString(doc.getLength(), "PANINOTECA ", doc.getStyle("large"));
+				doc.insertString(doc.getLength(), "ALADINO\n", doc.getStyle("aladino"));
+				doc.setLogicalStyle(doc.getLength(), doc.getStyle("left"));
 				for (int e = 0; e < initString.length; e++) {
 					doc.insertString(doc.getLength(), initString[e], doc.getStyle(initStyles[e]));
 				}
@@ -191,12 +200,70 @@ public class CashDeskFrame extends JInternalFrame {
 
 	}
 
+	private void print(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_print
+		// MessageFormat header = createFormat(headerField);
+		// MessageFormat footer = createFormat(footerField);
+		// boolean interactive = interactiveCheck.isSelected();
+		boolean background = false;// backgroundCheck.isSelected();
+
+		// PrintingTask task = new PrintingTask(header, footer, interactive);
+		PrintingTask task = new PrintingTask(null, null, true);
+		if (background) {
+			task.execute();
+		} else {
+			task.run();
+		}
+	}// GEN-LAST:event_print
+
+	private class PrintingTask extends SwingWorker<Object, Object> {
+		private final MessageFormat	headerFormat;
+		private final MessageFormat	footerFormat;
+		private final boolean		interactive;
+		private volatile boolean	complete	= false;
+		private volatile String		message;
+
+		public PrintingTask(MessageFormat header, MessageFormat footer, boolean interactive) {
+			this.headerFormat = header;
+			this.footerFormat = footer;
+			this.interactive = interactive;
+		}
+
+		@Override
+		protected Object doInBackground() {
+			try {
+				PrinterJob pj = PrinterJob.getPrinterJob();
+				PrintService[] ps = PrinterJob.lookupPrintServices();
+				for (int i = 0; i < ps.length; i++) {
+					if (!ps[i].getName().equals("Officejet 4500 G510g-m [EFF970]")) {
+						System.out.println(ps[i].getName());
+						PrintRequestAttributeSet attr_set = new HashPrintRequestAttributeSet();
+						attr_set.add(new MediaPrintableArea(5, 5, 90, 200, MediaPrintableArea.MM));
+						this.complete = CashDeskFrame.this.textPane.print(this.headerFormat, this.footerFormat, false, ps[i], attr_set, this.interactive);
+						this.message = "Printing " + (this.complete ? "complete" : "canceled");
+						System.out.println(ps[i].getName());
+					}
+				}
+			} catch (PrinterException ex) {
+				this.message = "Sorry, a printer error occurred";
+			} catch (SecurityException ex) {
+				this.message = "Sorry, cannot access the printer due to security reasons";
+			}
+			return null;
+		}
+
+		@Override
+		protected void done() {
+			Console.println("Stampa completata");
+			// message(!this.complete, this.message);
+		}
+	}
 	protected void addStylesToDocument(StyledDocument doc) {
 		// Initialize some styles.
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
 		Style regular = doc.addStyle("regular", def);
 		StyleConstants.setFontFamily(def, "SansSerif");
+
 
 		Style s = doc.addStyle("italic", regular);
 		StyleConstants.setItalic(s, true);
@@ -210,6 +277,18 @@ public class CashDeskFrame extends JInternalFrame {
 		s = doc.addStyle("large", regular);
 		StyleConstants.setFontSize(s, 16);
 
+		s = doc.addStyle("blue", regular);
+		StyleConstants.setForeground(s, Color.BLUE);
+
+		s = doc.addStyle("right", regular);
+		StyleConstants.setAlignment(s, StyleConstants.ALIGN_RIGHT);
+
+		s = doc.addStyle("center", regular);
+		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
+
+		s = doc.addStyle("aladino", regular);
+		StyleConstants.setFontFamily(s, "prova");
+
 		s = doc.addStyle("icon", regular);
 		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
 		ImageIcon logoIcon = new ImageIcon("images/logo.gif", "Logo");
@@ -221,5 +300,6 @@ public class CashDeskFrame extends JInternalFrame {
 	protected void convertButtonActionPerformed(ActionEvent evt) {
 		JButton b = (JButton) evt.getSource();
 		Console.println(b.getText());
+		this.print(evt);
 	}
 }
