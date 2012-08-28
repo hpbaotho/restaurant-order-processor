@@ -336,6 +336,7 @@ public class CashDeskFrame extends JInternalFrame {
 
 	protected void convertButtonActionPerformed(ActionEvent evt) {
 		JButton b = (JButton) evt.getSource();
+		// core.buttonEvent(b.getText());
 		Console.println(b.getText());
 		Product p = new Product("Pinot");
 		this.appendToText("PROVAPROVA\n");
