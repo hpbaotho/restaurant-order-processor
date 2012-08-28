@@ -1,11 +1,47 @@
-Bionda Piccola!0!0!150
-Bionda Media!0!0!250
-Rossa Piccola!0!0!175
-Rossa Media!1!0!275
-Birra Speciale!0!0!400
-Acqua 0.5 Litro!0!0!100
+Allegria!0!0!450
+Amicizia!0!0!500
+Armonia!0!0!500
+Beona!0!0!500
+Boscaiola!0!0!500
+Dialogo!0!0!500
+Doblone!0!0!500
+Ecologico!0!0!500
+Enoteca!0!0!500
+Fantasia!0!0!500
+Gran Famiglia!0!0!500
+Pagoda!0!0!500
+Proximus!0!0!500
+Sardon!0!0!500
+Solidarietˆ!0!0!500
+Sorriso!0!0!500
+Bionda Piccola!1!0!150
+Bionda Media!1!0!250
+Rossa Piccola!1!0!175
+Rossa Media!1!1!275
+Birra Speciale!1!0!400
+Acqua 0.5 Litro!1!0!100
 Acqua 1.5 Litri!1!0!150
-The Pesca!0!0!200
-The Limone!0!0!200
-Coca Cola!3!0!200
-Fanta!2!0!200
+The Pesca!1!0!200
+The Limone!1!0!200
+Coca Cola!1!0!200
+Fanta!1!0!200
+Rosso!2!0!200
+Prosecco!2!0!200
+Rabosello!2!0!200
+Pinot!2!0!600
+Altri vini!2!0!700
+Bruschette!3!0!150
+Toast!3!0!150
+Toast Farcito!3!0!200
+Piadina crudo/mozz!3!0!300
+Piadina cotto/mozz!3!0!300
+Pizzetta!3!0!200
+Patatine Fritte!4!0!200
+Mozz.Carr. PROSC!4!0!250
+Mozz.Carr. ACCIUG!4!0!250
+Tiramisu!5!0!250
+Zuppa Inglese!5!0!250
+Crepe Nutella!5!0!400
+Crepe Marmellata!5!0!400
+
+

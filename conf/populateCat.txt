@@ -1,5 +1,6 @@
+Panini
 Bibite
 Vini
 Cucina
-Fritto
+Fritto/Varie
 Dolci

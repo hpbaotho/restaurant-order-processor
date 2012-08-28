@@ -186,7 +186,6 @@ public class Database {
 		while (!rs.isLast()) {
 			rs.next();
 			values.add(rs.getString(2));
-			System.out.println("Id: " + rs.getInt(1) + " Name: " + rs.getString(2));
 		}
 		return values;
 	}
@@ -211,7 +210,6 @@ public class Database {
 			// Checking if the data is correct
 			while (!rs.isLast()) {
 				rs.next();
-				System.out.println("Id: " + rs.getInt(1) + " Name: " + rs.getString(2));
 			}
 			this.connection.prepareStatement("drop table cat;").execute();
 
