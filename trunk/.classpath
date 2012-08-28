@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="src" path="conf"/>
 	<classpathentry kind="src" path="db"/>
+	<classpathentry kind="src" path="images"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="output" path="bin"/>

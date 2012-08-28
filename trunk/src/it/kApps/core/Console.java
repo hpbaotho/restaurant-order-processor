@@ -17,18 +17,30 @@ public class Console {
 		gui = g;
 	}
 
-	public static void print(String msg) {
-		if (gui != null) {
-			gui.writeInConsole(msg);
+	public static void print(Object msg) {
+		String text;
+		if (msg instanceof String) {
+			text = (String) msg;
 		} else {
-			System.out.print(msg);
+			text = msg.toString();
+		}
+		if (gui != null) {
+			gui.writeInConsole(text);
+		} else {
+			System.out.print(text);
 		}
 	}
 
-	public static void println(String msg) {
-		print(msg + NEW_LINE_FEED);
+	public static void println(Object msg) {
+		String text;
+		if (msg instanceof String) {
+			text = (String) msg;
+		} else {
+			text = msg.toString();
+		}
+		print(text + NEW_LINE_FEED);
 	}
-	
+
 	public static String center(String msg){
 		String result = msg;
 		println(""+gui.getConsoleWidth());

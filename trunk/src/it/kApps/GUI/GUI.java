@@ -127,7 +127,6 @@ public class GUI {
 
 	public Container createCochiPane() {
 
-		System.out.println("called2");
 		JInternalFrame intFrame = new JInternalFrame("Cochi", true, true, true, true);
 		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove
 		// shadows
@@ -156,7 +155,6 @@ public class GUI {
 
 	public Container createCashDeskPane() {
 
-		System.out.println("called");
 		CashDeskFrame intFrame = new CashDeskFrame();
 		this.desktop.add(intFrame);
 
