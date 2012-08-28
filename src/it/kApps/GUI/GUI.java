@@ -3,11 +3,11 @@ package it.kApps.GUI;
 import it.kApps.core.Console;
 
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.util.Hashtable;
 
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -57,19 +57,21 @@ public class GUI {
 
 		this.desktop = new JDesktopPane();
 		mainFrame.setContentPane(this.desktop);
+		this.desktop.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		JButton btt = new JButton("button");
-		btt.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				GUI.this.convertButtonActionPerformed(evt);
-			}
-		});
-		mainFrame.add(btt);
-		btt.setSize(100,100);
-		btt.setVisible(true);
+		// JButton btt = new JButton("button");
+		// btt.addActionListener(new java.awt.event.ActionListener() {
+		// @Override
+		// public void actionPerformed(java.awt.event.ActionEvent evt) {
+		// GUI.this.convertButtonActionPerformed(evt);
+		// }
+		// });
+		// mainFrame.add(btt);
+		// btt.setSize(100,100);
+		// btt.setVisible(true);
 
 		this.createConsolePane();
+		this.createCashDeskPane();
 		this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
 		// ########DEBUG
@@ -81,10 +83,11 @@ public class GUI {
 		mainFrame.setVisible(true);
 	}
 
-	private void convertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convertButtonActionPerformed
-		//Parse degrees Celsius as a double and convert to Fahrenheit
-		Console.println(Console.center("schiacciato"));
-	}
+	// private void convertButtonActionPerformed(java.awt.event.ActionEvent evt)
+	// {//GEN-FIRST:event_convertButtonActionPerformed
+	// //Parse degrees Celsius as a double and convert to Fahrenheit
+	// Console.println(Console.center("schiacciato"));
+	// }
 
 	public Container createConsolePane() {
 
@@ -108,8 +111,6 @@ public class GUI {
 		intFrame.pack();
 		intFrame.setVisible(true);
 		intFrames.put("Console", intFrame);
-
-		//		mainFrame.repaint();
 
 		return this.desktop;
 	}
