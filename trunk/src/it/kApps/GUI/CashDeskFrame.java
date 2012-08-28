@@ -3,13 +3,16 @@ package it.kApps.GUI;
 import it.kApps.core.Console;
 import it.kApps.core.Database;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -17,7 +20,9 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -137,16 +142,27 @@ public class CashDeskFrame extends JInternalFrame {
 					"text ", // small
 					"component, ", // large
 					"which supports embedded components..." + newline,// regular
-					" " + newline, // button
 					"...and embedded icons..." + newline, // regular
 					" ", // icon
-					newline + "JTextPane is a subclass of JEditorPane that " + "uses a StyledEditorKit and StyledDocument, and provides "
-					+ "cover methods for interacting with those objects." };
+					newline + "JTextPane is a subclass of JEditorPane that " + newline + "uses a StyledEditorKit and StyledDocument, and provides "
+					+ "cover methods for interacting with those objects" };
 
-			String[] initStyles = { "regular", "italic", "bold", "small", "large", "regular", "button", "regular", "icon", "regular" };
+			String[] initStyles = { "regular", "italic", "bold", "small", "large", "regular", "regular", "icon", "regular" };
+
+			JPanel other = new JPanel();
+			other.setLayout(new BoxLayout(other, BoxLayout.PAGE_AXIS));
 
 			JTextPane textPane = new JTextPane();
+			textPane.setMargin(new Insets(10, 10, 10, 10));
 			StyledDocument doc = textPane.getStyledDocument();
+			JScrollPane scroll = new JScrollPane(textPane);
+			Dimension dim = new Dimension(350, 600);
+			scroll.setMaximumSize(dim);
+			// scroll.setMinimumSize(dim);
+			scroll.setPreferredSize(dim);
+			scroll.setBorder(BorderFactory.createLineBorder(Color.black));
+			scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 			this.addStylesToDocument(doc);
 
 			try {
@@ -156,7 +172,12 @@ public class CashDeskFrame extends JInternalFrame {
 			} catch (BadLocationException ble) {
 				System.err.println("Couldn't insert initial text into text pane.");
 			}
-			this.add(textPane);
+			other.add(Box.createRigidArea(new Dimension(0, 10)));
+			other.add(scroll);
+			other.add(Box.createVerticalGlue());
+			this.add(other);
+			this.add(Box.createRigidArea(new Dimension(10, 0)));
+			this.add(Box.createHorizontalGlue());
 			this.pack();
 
 
@@ -191,25 +212,12 @@ public class CashDeskFrame extends JInternalFrame {
 
 		s = doc.addStyle("icon", regular);
 		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
-		ImageIcon pigIcon = createImageIcon("images/spiox.gif", "a cute pig");
-		if (pigIcon != null) {
-			StyleConstants.setIcon(s, pigIcon);
-		}
-
-		s = doc.addStyle("button", regular);
-		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
-	}
-
-	/** Returns an ImageIcon, or null if the path was invalid. */
-	protected static ImageIcon createImageIcon(String path, String description) {
-		java.net.URL imgURL = CashDeskFrame.class.getResource(path);
-		if (imgURL != null) {
-			return new ImageIcon(path, description);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
+		ImageIcon logoIcon = new ImageIcon("images/logo.gif", "Logo");
+		if (logoIcon != null) {
+			StyleConstants.setIcon(s, logoIcon);
 		}
 	}
+
 	protected void convertButtonActionPerformed(ActionEvent evt) {
 		JButton b = (JButton) evt.getSource();
 		Console.println(b.getText());
