@@ -1,5 +1,6 @@
 package it.kApps.GUI;
 
+import it.kApps.core.CashDesk;
 import it.kApps.core.Console;
 
 import java.awt.Container;
@@ -155,6 +156,7 @@ public class GUI {
 
 	public Container createCashDeskPane() {
 
+		CashDesk cd = new CashDesk();
 		CashDeskFrame intFrame = new CashDeskFrame(null);
 		this.desktop.add(intFrame);
 
