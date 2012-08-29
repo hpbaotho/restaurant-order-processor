@@ -199,6 +199,11 @@ public class Database {
 			Database.connection.prepareStatement("CREATE TABLE ingredients (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE);").execute();
 
 			// ###### DEBUG ######
+			Console.println(CN + "Creating table 'settings'");
+			// ###################
+			Database.connection.prepareStatement("CREATE TABLE settings (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, value VARCHAR(30));").execute();
+
+			// ###### DEBUG ######
 			Console.println(CN + "Structure created!");
 			// ###################
 
@@ -298,6 +303,15 @@ public class Database {
 		}
 	}
 
+	public static boolean updateTable(String table, String name, String value) {
+		try {
+			connection.prepareStatement("UPDATE " + table + " SET value='" + value + "' WHERE name='" + value + "';").execute();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+
 	public static void main(String[] args) {
 		//
 		// // 'Server' is a class of HSQLDB representing
@@ -378,8 +392,7 @@ public class Database {
 		Database.tableStructureCreation();
 		Database.populateFromFile("conf/populateCat.txt", "categories");
 		Database.populateFromFile("conf/populateProd.txt", "products");
-		Database.listTableValues("products");
-		Database.listTableColumns("products");
+		Database.populateFromFile("conf/populateSett.txt", "settings");
 		// d.doSomething();
 		Database.stop();
 	}

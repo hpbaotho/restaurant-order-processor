@@ -3,7 +3,6 @@ package it.kApps.GUI;
 import it.kApps.core.CashDesk;
 import it.kApps.core.Console;
 import it.kApps.core.Database;
-import it.kApps.core.Product;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -55,12 +54,15 @@ public class CashDeskFrame extends JInternalFrame {
 	private Hashtable<String, JButton>	buttons;
 	private final JTextPane				textPane;
 	private final StyledDocument doc;
+	private final CashDesk				core;
 
 	/**
 	 * Main constructor, create the frame with each button for each product.
 	 */
 	public CashDeskFrame(CashDesk core) {
 		super();
+		this.core = core;
+		core.setGui(this);
 		this.setIconifiable(true);
 		this.setClosable(true);
 		this.setResizable(true);
@@ -217,6 +219,34 @@ public class CashDeskFrame extends JInternalFrame {
 
 	}
 
+	private void paintHeader() {
+		try {
+			this.doc.setParagraphAttributes(0, this.doc.getLength(), this.doc.getStyle("blue"), false);
+			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("center"));
+			this.doc.insertString(this.doc.getLength(), "FESTA CON NOI 2012\n", this.doc.getStyle("regular"));
+			this.doc.insertString(this.doc.getLength(), "Paninoteca Aladino\n", this.doc.getStyle("aladino"));
+			this.doc.insertString(this.doc.getLength(), "Ordine n.", this.doc.getStyle("small"));
+			String order = this.core.getActualOrder();
+			this.doc.insertString(this.doc.getLength(), order, this.doc.getStyle("regular"));
+
+			Date todaysDate = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("EEE, dd-MM-yy HH:mm:ss");
+			String formattedDate = formatter.format(todaysDate);
+
+			this.doc.insertString(this.doc.getLength(), "                          " + formattedDate + "\n", this.doc.getStyle("small"));
+		} catch (BadLocationException e) {
+
+		}
+	}
+
+	private void clearText() {
+		try {
+			this.doc.remove(0, this.doc.getLength());
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private void appendToText(String s) {
 		try {
 			this.doc.insertString(this.doc.getLength(), "FESTA CON NOI 2012\n", this.doc.getStyle("regular"));
@@ -336,10 +366,17 @@ public class CashDeskFrame extends JInternalFrame {
 
 	protected void convertButtonActionPerformed(ActionEvent evt) {
 		JButton b = (JButton) evt.getSource();
-		// core.buttonEvent(b.getText());
+		this.core.buttonEvent(b.getText());
 		Console.println(b.getText());
-		Product p = new Product("Pinot");
-		this.appendToText("PROVAPROVA\n");
 		//		this.print(evt);
+	}
+
+	public void repaintText() {
+		this.clearText();
+		this.paintHeader();
+		Console.println(this.core.getKitchenProd());
+		Console.println(this.core.getBarProd());
+		Console.println(this.core.getFriedProd());
+		Console.println(this.core.getTotal());
 	}
 }

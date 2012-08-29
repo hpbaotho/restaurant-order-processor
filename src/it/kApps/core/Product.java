@@ -46,4 +46,8 @@ public class Product {
 		return this.name;
 	}
 
+	public int getPrice() {
+		return this.price;
+	}
+
 }

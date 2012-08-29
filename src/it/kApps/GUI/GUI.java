@@ -157,7 +157,7 @@ public class GUI {
 	public Container createCashDeskPane() {
 
 		CashDesk cd = new CashDesk();
-		CashDeskFrame intFrame = new CashDeskFrame(null);
+		CashDeskFrame intFrame = new CashDeskFrame(cd);
 		this.desktop.add(intFrame);
 
 		// intFrame.pack();
