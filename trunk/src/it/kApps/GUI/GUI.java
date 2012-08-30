@@ -3,6 +3,7 @@ package it.kApps.GUI;
 import it.kApps.core.CashDesk;
 import it.kApps.core.Console;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +12,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.print.PrintService;
@@ -26,6 +28,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -123,6 +126,70 @@ public class GUI {
 		this.output.setLineWrap(true);
 		this.output.setWrapStyleWord(false);
 		this.scrollPane = new JScrollPane(this.output);
+
+		// Add the text area to the content pane.
+		intFrame.add(this.scrollPane);
+		intFrame.pack();
+		intFrame.setVisible(true);
+		intFrames.put("Console", intFrame);
+
+		return this.desktop;
+	}
+
+	public Container createIngredientPane() {
+
+		if (GUI.intFrames.containsKey("Ingredients")) {
+			if (intFrames.get("Ingredients").isVisible()) {
+				return null;
+			} else {
+				intFrames.get("Ingredients").setVisible(false);
+				this.desktop.remove(intFrames.get("Ingredients"));
+				intFrames.remove("Ingredients");
+				return null;
+			}
+		}
+		JInternalFrame intFrame = new JInternalFrame("Ingredients", true, true, true, true);
+
+		ArrayList<JTextField> tfAdd = new ArrayList<JTextField>();
+		ArrayList<JTextField> tfDelete = new ArrayList<JTextField>();
+
+		intFrame.setBounds(800, 300, 150, 50); // min size
+		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+		this.desktop.add(intFrame);
+
+		// Create a scrolled text area.
+		intFrame.setLayout(new BoxLayout(intFrame, BoxLayout.PAGE_AXIS));
+		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
+		intFrame.add(new JLabel("Aggiungi"));
+		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
+		for (int i = 0; i < 4; i++) {
+			JTextField tef = new JTextField();
+			tfAdd.add(tef);
+			intFrame.add(tef);
+		}
+		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
+		intFrame.add(new JLabel("Aggiungi"));
+		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
+		for (int i = 0; i < 4; i++) {
+			JTextField tef = new JTextField();
+			tfDelete.add(tef);
+			intFrame.add(tef);
+		}
+		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
+
+		JButton btt = new JButton("Ket");
+		Dimension d = new Dimension(60, 40);
+		btt.setBackground(Color.WHITE);
+		btt.setOpaque(true);
+		btt.setPreferredSize(d);
+		btt.setMaximumSize(d);
+		btt.setSize(d);
+		btt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				// GUI.this.convertButtonActionPerformed(evt);
+			}
+		});
 
 		// Add the text area to the content pane.
 		intFrame.add(this.scrollPane);

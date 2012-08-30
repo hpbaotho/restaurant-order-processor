@@ -37,7 +37,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("1") || p.getCat().equals("2")) {
-				list.add(p.getCompleteName());
+				list.add(p.getCompleteName() + p.getAdds());
 			}
 		}
 		return list;
@@ -48,7 +48,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("0") || p.getCat().equals("3") || p.getCat().equals("5")) {
-				list.add(p.getCompleteName());
+				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves());
 			}
 		}
 		return list;
@@ -59,7 +59,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("4")) {
-				list.add(p.getCompleteName());
+				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves());
 			}
 		}
 		return list;
@@ -112,6 +112,9 @@ public class CashDesk {
 				JOptionPane.showMessageDialog((Component) null, "SCUSA SA', MA NOL COMPRA NIENTE?");
 				return;
 			}
+			this.gui.print();
+			this.incrementOrderNum();
+			this.newClient();
 			// if (this.gui.print()) {
 			//
 			// }
@@ -122,6 +125,19 @@ public class CashDesk {
 			this.prods.add(new Product("Maionese"));
 		}else if("Temp.Amb.".equals(text)) {
 			this.prods.get(this.prods.size() - 1).addToName("Temp.Ambiente");
+		} else if ("Sfogliata Fantasia".equals(text) || "Toast Farcito".equals(text)) {
+			Product p = new Product(text, free);
+			String ing = JOptionPane.showInputDialog("Inserisci gli ingredienti");
+			p.setAdds(ing);
+			this.prods.add(p);
+			if (!free) {
+				this.updateTotal(p.getPrice(), "+");
+			}
+		} else if ("Togli".equals(text)) {
+			if (this.prods.size() > 0) {
+				String ing = JOptionPane.showInputDialog("Cosa vuoi togliere?");
+				this.prods.get(this.prods.size() - 1).setRemoves(ing);
+			}
 		}else{
 			Product p = new Product(text, free);
 			this.prods.add(p);
@@ -132,9 +148,29 @@ public class CashDesk {
 		this.gui.repaintText();
 	}
 
+	private void incrementOrderNum() {
+		Database.connect();
+		ResultSet rs = Database.listValuesByName("ordersToday", "settings");
+		int actual = 0;
+		try {
+			while (rs.next()) {
+				actual = rs.getInt(3);
+			}
+		} catch (SQLException e) {
+			// ###### DEBUG ######
+			Console.println("[CashDesk] Error in handling database values");
+			// ###################
+		}
+		actual += 1;
+		Boolean updated = Database.updateTable("settings", "ordersToday", "" + actual);
+		if (!updated) {
+			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE ORDER NUM");
+		}
+		Database.disconnect();
+	}
 	private void incrementTotalDB(int value) {
 		Database.connect();
-		ResultSet rs = Database.listValuesByName("tatalToday", "settings");
+		ResultSet rs = Database.listValuesByName("totalToday", "settings");
 		int actual = 0;
 		try {
 			while (rs.next()) {
@@ -163,7 +199,7 @@ public class CashDesk {
 			// ###################
 		}
 		ever += value;
-		updated = Database.updateTable("settings", "totalToday", "" + ever);
+		updated = Database.updateTable("settings", "totalEver", "" + ever);
 		if (!updated) {
 			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL OF THE DAY. " + value + " euro");
 		}

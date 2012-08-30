@@ -21,11 +21,14 @@ The Pesca!1!0!200
 The Limone!1!0!200
 Coca Cola!1!0!200
 Fanta!1!0!200
-Rosso!2!0!200
-Prosecco!2!0!200
-Rabosello!2!0!200
-Pinot Rosa!2!0!600
-Altri vini!2!0!700
+Raboso Bicc.!2!0!100
+Raboso 1/2l!2!0!350
+Raboso 1l!2!0!600
+Prosecco Bicc.!2!0!100
+Prosecco 1/2l!2!0!350
+Prosecco 1l!2!0!600
+Prosecco Bott!2!0!800
+Pinot Rosa!2!0!550
 Bruschetta!3!0!150
 Toast!3!0!150
 Toast Farcito!3!0!200
@@ -37,6 +40,10 @@ Panino Cotto!3!0!300
 Panino Crudo!3!0!300
 Panino Salame!3!0!300
 Panino Speck!3!0!300
+Crepe cotto!3!0!350
+Crepe crudo!3!0!400
+Crepe formaggio!3!0!400
+Crepe cotto/form!3!0!400
 Patatine Fritte!4!0!200
 Mozz.Carr. PROSC!4!0!250
 Mozz.Carr. ACCIUG!4!0!250
@@ -44,5 +51,3 @@ Tiramisu!5!0!250
 Zuppa Inglese!5!0!250
 Crepe Nutella!5!0!400
 Crepe Marmellata!5!0!400
-
-

@@ -305,7 +305,7 @@ public class Database {
 
 	public static boolean updateTable(String table, String name, String value) {
 		try {
-			connection.prepareStatement("UPDATE " + table + " SET value='" + value + "' WHERE name='" + value + "';").execute();
+			connection.prepareStatement("UPDATE " + table + " SET value='" + value + "' WHERE name='" + name + "';").execute();
 			return true;
 		} catch (SQLException e) {
 			return false;
@@ -393,6 +393,7 @@ public class Database {
 		Database.populateFromFile("conf/populateCat.txt", "categories");
 		Database.populateFromFile("conf/populateProd.txt", "products");
 		Database.populateFromFile("conf/populateSett.txt", "settings");
+
 		// d.doSomething();
 		Database.stop();
 	}
