@@ -2,16 +2,18 @@ package it.kApps.core;
 
 import it.kApps.GUI.CashDeskFrame;
 
+import java.awt.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CashDesk implements Runnable {
-	private int			total;
+import javax.swing.JOptionPane;
+
+public class CashDesk {
+	private int							total;
 	private final ArrayList<Product>	prods;
-	private final boolean				stopThread	= false;
-	private final boolean				isThereAChange	= true;
 	private CashDeskFrame				gui;
+	private int							whereTo			= -1;
 
 	public CashDesk() {
 		this.total = 0;
@@ -22,12 +24,20 @@ public class CashDesk implements Runnable {
 		this.gui = g;
 	}
 
+	public void setWhereTo(int table) {
+		this.whereTo = table;
+	}
+
+	public int getWhereTo(){
+		return this.whereTo;
+	}
+
 	public ArrayList<String> getBarProd() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("1") || p.getCat().equals("2")) {
-				list.add(p.getName());
+				list.add(p.getCompleteName());
 			}
 		}
 		return list;
@@ -38,7 +48,7 @@ public class CashDesk implements Runnable {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("0") || p.getCat().equals("3") || p.getCat().equals("5")) {
-				list.add(p.getName());
+				list.add(p.getCompleteName());
 			}
 		}
 		return list;
@@ -49,7 +59,7 @@ public class CashDesk implements Runnable {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("4")) {
-				list.add(p.getName());
+				list.add(p.getCompleteName());
 			}
 		}
 		return list;
@@ -58,9 +68,17 @@ public class CashDesk implements Runnable {
 	public int getTotal() {
 		return this.total;
 	}
+
+	public ArrayList<Product> getProds() {
+		return this.prods;
+	}
+
 	private int updateTotal(int sum, String operator) {
 		if ("-".equals(operator)) {
 			this.total -= sum;
+			if (sum <= 0) {
+				sum = 0;
+			}
 		} else if ("+".equals(operator)) {
 			this.total += sum;
 		}
@@ -69,39 +87,53 @@ public class CashDesk implements Runnable {
 
 	private void newClient() {
 		this.incrementTotalDB(this.total);
-		// TODO UPDATE THE GUI
 		this.total = 0;
 		this.prods.clear();
+		this.whereTo = -1;
+		this.gui.resetWhereTo();
+		this.gui.repaintText();
 	}
 
-	@Override
-	public void run() {
-
-		// if a name has not be defined the client listener don't send any message to the server
-		while (!this.stopThread && this.isThereAChange) {
-			if (this.gui != null) {
-				this.gui.repaintText();
-			} else {
-				Console.println("[CashDesk] No GUI avaible");
+	public void buttonEvent(String text, boolean free) {
+		if ("<".equals(text)){
+			Product p = this.prods.remove(this.prods.size() - 1);
+			this.updateTotal(p.getPrice(), "-");
+		}else if("X".equals(text)){
+			this.total = 0;
+			this.prods.clear();
+			this.whereTo = -1;
+			this.gui.resetWhereTo();
+		}else if("Conferma".equals(text)){
+			if (this.whereTo == -1) {
+				JOptionPane.showMessageDialog((Component) null, "DEVI SELEZIONARE UN TAVOLO");
+				return;
 			}
-			// XXX we should add a counter here, after few time of wrong answer the thread must die
-		}
+			if (this.prods.size() == 0) {
+				JOptionPane.showMessageDialog((Component) null, "SCUSA SA', MA NOL COMPRA NIENTE?");
+				return;
+			}
+			// if (this.gui.print()) {
+			//
+			// }
 
-
-	}
-
-	public void buttonEvent(String text) {
-		if (!"Annulla".equals(text)) {
-			Product p = new Product(text);
-			if (p.getPrice() != 0) {
-				this.prods.add(p);
+		}else if("Ket".equals(text)){
+			this.prods.add(new Product("Ketchup"));
+		}else if("May".equals(text)){
+			this.prods.add(new Product("Maionese"));
+		}else if("Temp.Amb.".equals(text)) {
+			this.prods.get(this.prods.size() - 1).addToName("Temp.Ambiente");
+		}else{
+			Product p = new Product(text, free);
+			this.prods.add(p);
+			if (!free) {
 				this.updateTotal(p.getPrice(), "+");
-				this.gui.repaintText();
 			}
 		}
+		this.gui.repaintText();
 	}
 
 	private void incrementTotalDB(int value) {
+		Database.connect();
 		ResultSet rs = Database.listValuesByName("tatalToday", "settings");
 		int actual = 0;
 		try {
@@ -135,6 +167,7 @@ public class CashDesk implements Runnable {
 		if (!updated) {
 			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL OF THE DAY. " + value + " euro");
 		}
+		Database.disconnect();
 	}
 
 	public String getActualOrder() {

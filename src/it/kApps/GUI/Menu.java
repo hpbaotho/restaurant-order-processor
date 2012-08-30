@@ -23,34 +23,34 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 public class Menu implements ActionListener, ItemListener {
-	JTextArea output;
-	JScrollPane scrollPane;
+	JTextArea					output;
+	JScrollPane					scrollPane;
 	/**
 	 * The main menu bar
 	 */
-	private JMenuBar menuBar;
+	private JMenuBar			menuBar;
 	/**
 	 * Each menu
 	 */
-	private JMenu menu;
+	private JMenu				menu;
 	/**
 	 * Each submenu;
 	 */
-	private JMenu submenu;
+	private JMenu				submenu;
 	/**
 	 * Each element of the menu
 	 */
-	private JMenuItem menuItem;
+	private JMenuItem			menuItem;
 	/**
 	 * Each check-box in the menu
 	 */
-	private JCheckBoxMenuItem cbMenuItem;
+	private JCheckBoxMenuItem	cbMenuItem;
 
-	private final GUI gui;
+	private final GUI			gui;
 
-	private static final String NEW_LINE = "\n";
+	private static final String	NEW_LINE	= "\n";
 
-	public Menu (GUI g){
+	public Menu(GUI g) {
 		this.gui = g;
 	}
 
@@ -69,8 +69,7 @@ public class Menu implements ActionListener, ItemListener {
 		// a group of JMenuItems
 		this.menuItem = new JMenuItem("Start new day", KeyEvent.VK_S);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
-				ActionEvent.CTRL_MASK));
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		this.menuItem.addActionListener(this);
 		this.menu.add(this.menuItem);
 
@@ -108,8 +107,7 @@ public class Menu implements ActionListener, ItemListener {
 		this.submenu.setMnemonic(KeyEvent.VK_S);
 
 		this.menuItem = new JMenuItem("An item in the submenu");
-		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
-				ActionEvent.ALT_MASK));
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
 		this.menuItem.addActionListener(this);
 		this.submenu.add(this.menuItem);
 
@@ -124,21 +122,30 @@ public class Menu implements ActionListener, ItemListener {
 		this.menu.add(this.menuItem);
 
 		// Build second menu in the menu bar.
+		this.menu = new JMenu("Settings");
+		this.menu.setMnemonic(KeyEvent.VK_S);
+		this.menuBar.add(this.menu);
+
+		this.menuItem = new JMenuItem("Set Printers", KeyEvent.VK_P);
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+		this.menuItem.addActionListener(this);
+		this.menu.add(this.menuItem);
+
+		// another menu
 		this.menu = new JMenu("Window");
 		this.menu.setMnemonic(KeyEvent.VK_W);
 		this.menuBar.add(this.menu);
 
 		// a group of JMenuItems
 		this.menuItem = new JMenuItem("Set defaults windows", KeyEvent.VK_D);
-		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-				ActionEvent.CTRL_MASK));
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
 		this.menuItem.addActionListener(this);
 		this.menu.add(this.menuItem);
 
 		this.menu.addSeparator();
 
 		this.cbMenuItem = new JCheckBoxMenuItem("Console");
-		if (this.gui.getIntFrames().get("Console").isVisible()) {
+		if (this.gui.getIntFrames().containsKey("Console") && this.gui.getIntFrames().get("Console").isVisible()) {
 			this.cbMenuItem.setSelected(true);
 		} else {
 			this.cbMenuItem.setSelected(false);
@@ -185,14 +192,11 @@ public class Menu implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 		JMenuItem source = (JMenuItem) (e.getSource());
 		String action = source.getText();
-
 		if (action.equalsIgnoreCase("exit")) {
 			System.exit(0);
 		}
-		this.gui.createCashDeskPane();
-		String s = "Action event detected." + NEW_LINE + "    Event source: "
-				+ source.getText() + " (an instance of "
-				+ this.getClassName(source) + ")";
+		this.gui.menuAction(e);
+		String s = "Action event detected." + NEW_LINE + "    Event source: " + source.getText() + " (an instance of " + this.getClassName(source) + ")";
 		Console.println(s);
 
 	}
@@ -202,22 +206,14 @@ public class Menu implements ActionListener, ItemListener {
 		JMenuItem source = (JMenuItem) (e.getSource());
 		if (source.getText().equalsIgnoreCase("console")) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				this.gui.getIntFrames().get("Console").setVisible(true);
+				this.gui.createConsolePane();
+				// this.gui.getIntFrames().get("Console").setVisible(true);
 			} else {
 				this.gui.getIntFrames().get("Console").setVisible(false);
 			}
 		}
-		String s = "Item event detected."
-				+ NEW_LINE
-				+ "    Event source: "
-				+ source.getText()
-				+ " (an instance of "
-				+ this.getClassName(source)
-				+ ")"
-				+ NEW_LINE
-				+ "    New state: "
-				+ ((e.getStateChange() == ItemEvent.SELECTED) ? "selected"
-						: "unselected");
+		String s = "Item event detected." + NEW_LINE + "    Event source: " + source.getText() + " (an instance of " + this.getClassName(source) + ")"
+				+ NEW_LINE + "    New state: " + ((e.getStateChange() == ItemEvent.SELECTED) ? "selected" : "unselected");
 		Console.println(s);
 	}
 
