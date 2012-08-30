@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MagicHogwarts" default="try_jar" basedir=".">
+<project name="Pagoda" default="try_jar" basedir=".">
 	<description>
 	This buildfile is used to build the jar of the game.
 	</description>
 
 	<!-- ================== Property Definitions ===================== -->
-	<property file="${user.home}/MagicHogwarts.properties" />
-	<property file="${user.home}/.MagicHogwarts.properties" />
-	<property file="${basedir}/MagicHogwarts.properties" />
+	<property file="${user.home}/Pagoda.properties" />
+	<property file="${user.home}/.Pagoda.properties" />
+	<property file="${basedir}/Pagoda.properties" />
 
 	<!-- ================= File and Directory Names ==================== -->
 	<property name="src" location="${basedir}/src" />
 	<property name="build" location="${basedir}/build" />
 	<property name="dist" location="${basedir}/dist" />
-	<property name="app.name" value="MagicHogwarts" />
-	<property name="dist.jarHome" value="${user.home}/MagicHogwarts" />
-	<property name="app.version" value="0.1" />
+	<property name="app.name" value="Pagoda" />
+	<property name="dist.jarHome" value="${user.home}/Pagoda" />
+	<property name="app.version" value="3.0" />
 	<tstamp />
 	<property name="jar.name" value="${app.name}_${app.version}.${DSTAMP}.jar" />
 	<property name="jar.completePath" value="${dist.jarHome}/${jar.name}" />
@@ -32,10 +32,7 @@
 	<property name="compile.optimize" value="true" />
 
 	<!-- ================== External Dependencies ======================= -->
-	<property name="LWJGL" value="lwjgl.jar" />
-	<property name="Timer" value="timer.jar" />
-	<property name="Database" value="h2-1.3.158.jar" />
-	<property name="Splice" value="jarsplice-0.25.jar" />
+	<property name="Database" value="hsqldb.jar" />
 
 	<!-- ================== Compilation Classpath ======================= -->
 
@@ -43,7 +40,6 @@
 		<!--<pathelement location="${src.home}"/>-->
 		<fileset dir="${src}">
 			<include name="**/*.java" />
-			<exclude name="**/server/*.java"/>
 		</fileset>
 		<fileset dir="${shared.lib}">
 			<include name="**/*.jar" />
@@ -69,7 +65,7 @@
 		<mkdir dir="${build}/classes" />
 		<mkdir dir="${build}/lib" />
 		<copy todir="${build}/lib">
-			<fileset dir="${shared.lib}" includes="${Timer}, ${LWJGL}, ${Database}" />
+			<fileset dir="${shared.lib}" includes="${Database}" />
 		</copy>
 	</target>
 
@@ -90,19 +86,11 @@
 			<format property="compile.timestamp" pattern="yyyyMMddHHmm" />
 		</tstamp>
 		<!-- update core version in manifest -->
-		<replaceregexp file="${basedir}/manifestClient" match="Implementation-Version: .*" replace="Implementation-Version: ${app.version}.${compile.timestamp}" />
+		<replaceregexp file="${basedir}/manifest" match="Implementation-Version: .*" replace="Implementation-Version: ${app.version}.${compile.timestamp}" />
 		<!-- Create Jar file -->
-		<jar destfile="${jar.completePath}" manifest="${basedir}/manifestClient">
+		<jar destfile="${jar.completePath}" manifest="${basedir}/manifest">
 			<fileset dir="${build}/classes" excludes="**/*.bak" />
-			<fileset dir="${src}/" excludes="mh/" />
-			<fileset dir="${shared.lib}/native/macosx" />
-			<fileset dir="${shared.lib}/native/windows" />
-			<fileset dir="${shared.lib}/native/solaris" />
-			<fileset dir="${shared.lib}/native/linux" />
-			<zipfileset src="${shared.lib}/${Timer}" />
-			<zipfileset src="${shared.lib}/${LWJGL}" />
 			<zipfileset src="${shared.lib}/${Database}" />
-			<zipfileset src="${shared.lib}/${Splice}" />
 		</jar>
 	</target>
 
@@ -149,7 +137,7 @@
 	</target>
 
 	<!-- ================== Run Target =============================== -->
-	<target name="run" description="Run MagicHogwarts">
+	<target name="run" description="Run Pagoda">
 		<java jar="${jar.completePath}" fork="true">
 		</java>
 	</target>

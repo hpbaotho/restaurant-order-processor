@@ -24,7 +24,7 @@ public class Console {
 		} else {
 			text = msg.toString();
 		}
-		if (gui != null) {
+		if (gui != null && gui.getIntFrames().containsKey("Console")) {
 			gui.writeInConsole(text);
 		} else {
 			System.out.print(text);

@@ -1,26 +1,22 @@
 Allegria!0!0!450
 Amicizia!0!0!500
-Armonia!0!0!500
+Amore!0!0!500
 Beona!0!0!500
 Boscaiola!0!0!500
 Dialogo!0!0!500
-Doblone!0!0!500
 Ecologico!0!0!500
-Enoteca!0!0!500
-Fantasia!0!0!500
-Gran Famiglia!0!0!500
 Pagoda!0!0!500
 Proximus!0!0!500
 Sardon!0!0!500
 Solidarietˆ!0!0!500
 Sorriso!0!0!500
-Bionda Piccola!1!0!150
-Bionda Media!1!0!250
-Rossa Piccola!1!0!175
-Rossa Media!1!1!275
+Bionda Piccola!1!0!200
+Bionda Media!1!0!300
+Rossa Piccola!1!0!270
+Rossa Media!1!1!370
 Birra Speciale!1!0!400
 Acqua 0.5 Litro!1!0!100
-Acqua 1.5 Litri!1!0!150
+Acqua 1.5 Litri!1!0!200
 The Pesca!1!0!200
 The Limone!1!0!200
 Coca Cola!1!0!200
@@ -28,14 +24,19 @@ Fanta!1!0!200
 Rosso!2!0!200
 Prosecco!2!0!200
 Rabosello!2!0!200
-Pinot!2!0!600
+Pinot Rosa!2!0!600
 Altri vini!2!0!700
-Bruschette!3!0!150
+Bruschetta!3!0!150
 Toast!3!0!150
 Toast Farcito!3!0!200
-Piadina crudo/mozz!3!0!300
-Piadina cotto/mozz!3!0!300
+Sfogliata 1!3!0!500
+Sfogliata 2!3!0!500
+Sfogliata Fantasia!3!0!500
 Pizzetta!3!0!200
+Panino Cotto!3!0!300
+Panino Crudo!3!0!300
+Panino Salame!3!0!300
+Panino Speck!3!0!300
 Patatine Fritte!4!0!200
 Mozz.Carr. PROSC!4!0!250
 Mozz.Carr. ACCIUG!4!0!250

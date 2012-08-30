@@ -11,8 +11,9 @@ public class Product {
 	private ArrayList<Integer>	prices;
 	private int					price;
 	private String[]			ingredients;
+	private String				addToName	= "";
 
-	public Product(String productName) {
+	public Product(String productName, boolean free) {
 		this.name = productName;
 		Database.connect();
 		ResultSet rs = Database.listValuesByName(this.name, "products");
@@ -27,7 +28,16 @@ public class Product {
 			Console.println("[Product] Error in handling database values");
 			// ###################
 		}
+		if (free) {
+			this.price = 0;
+		}
 		Database.disconnect();
+	}
+
+	public Product(String name) {
+		this.name = name;
+		this.cat = "0";
+
 	}
 
 	public String[] getIngredients() {
@@ -46,8 +56,16 @@ public class Product {
 		return this.name;
 	}
 
+	public String getCompleteName() {
+		return this.name + " " + this.addToName;
+	}
+
 	public int getPrice() {
 		return this.price;
+	}
+
+	public void addToName(String add) {
+		this.addToName = add;
 	}
 
 }
