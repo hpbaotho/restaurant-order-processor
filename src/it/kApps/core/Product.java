@@ -12,6 +12,8 @@ public class Product {
 	private int					price;
 	private String[]			ingredients;
 	private String				addToName	= "";
+	private final ArrayList<String>	adds		= new ArrayList<String>();
+	private final ArrayList<String>	removes		= new ArrayList<String>();
 
 	public Product(String productName, boolean free) {
 		this.name = productName;
@@ -42,6 +44,30 @@ public class Product {
 
 	public String[] getIngredients() {
 		return this.ingredients;
+	}
+
+	public void setAdds(String ing) {
+		this.adds.add(ing);
+	}
+
+	public void setRemoves(String ing) {
+		this.removes.add(ing);
+	}
+
+	public String getAdds() {
+		String s = "";
+		for (int i = 0; i < this.adds.size(); i++) {
+			s += "\n AGGIUNGI: " + this.adds.get(i);
+		}
+		return s;
+	}
+
+	public String getRemoves() {
+		String s = "";
+		for (int i = 0; i < this.removes.size(); i++) {
+			s += "\n TOGLI: " + this.removes.get(i);
+		}
+		return s;
 	}
 
 	public ArrayList<Integer> getPrices() {

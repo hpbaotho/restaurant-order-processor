@@ -99,7 +99,7 @@ public class CashDeskFrame extends JInternalFrame {
 			lbl.setVisible(true);
 			for (int j = 0; j < bts.size(); j++) {
 				JButton btt = new JButton(bts.get(j));
-				Dimension d = new Dimension(160, 40);
+				Dimension d = new Dimension(160, 35);
 				btt.setPreferredSize(d);
 				btt.setMaximumSize(d);
 				btt.setSize(d);
@@ -124,9 +124,9 @@ public class CashDeskFrame extends JInternalFrame {
 					lbl2.setHorizontalAlignment(SwingConstants.CENTER);
 					lbl2.setMaximumSize(new Dimension(400, 30));
 					lbl2.setVisible(true);
-					for (int j = 0; j < bts.size(); j++) {
-						JButton btt = new JButton(bts.get(j));
-						Dimension d = new Dimension(160, 40);
+					for (int j = 0; j < bts2.size(); j++) {
+						JButton btt = new JButton(bts2.get(j));
+						Dimension d = new Dimension(160, 35);
 						btt.setPreferredSize(d);
 						btt.setMaximumSize(d);
 						btt.setSize(d);
@@ -236,6 +236,20 @@ public class CashDeskFrame extends JInternalFrame {
 				CashDeskFrame.this.convertButtonActionPerformed(evt);
 			}
 		});
+		JButton remove = new JButton("Togli");
+		d = new Dimension(80, 40);
+		remove.setMargin(new Insets(2, 2, 2, 2));
+		remove.setBackground(Color.WHITE);
+		remove.setOpaque(true);
+		remove.setPreferredSize(d);
+		remove.setMaximumSize(d);
+		remove.setSize(d);
+		remove.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				CashDeskFrame.this.convertButtonActionPerformed(evt);
+			}
+		});
 
 		freeAndOther.add(this.free);
 		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -244,6 +258,8 @@ public class CashDeskFrame extends JInternalFrame {
 		freeAndOther.add(mayonnaise);
 		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
 		freeAndOther.add(hot);
+		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
+		freeAndOther.add(remove);
 
 		other.add(freeAndOther);
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -357,7 +373,7 @@ public class CashDeskFrame extends JInternalFrame {
 				}
 			}
 			this.doc.insertString(this.doc.getLength(), "\n\n", this.doc.getStyle("regular"));
-			this.doc.insertString(this.doc.getLength(), "Totale: " + total + "0 Û\n\n", this.doc.getStyle("regular"));
+			this.doc.insertString(this.doc.getLength(), "Totale: " + total + "0 E\n\n", this.doc.getStyle("regular"));
 		} catch (BadLocationException e) {
 
 		}
@@ -391,7 +407,7 @@ public class CashDeskFrame extends JInternalFrame {
 		}
 	}
 
-	private void print(ActionEvent evt) {
+	public void print() {
 		boolean background = false;// backgroundCheck.isSelected();
 
 		// PrintingTask task = new PrintingTask(header, footer, interactive);
@@ -527,4 +543,5 @@ public class CashDeskFrame extends JInternalFrame {
 			this.paintFooter();
 		}
 	}
+
 }
