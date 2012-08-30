@@ -10,7 +10,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -73,33 +72,38 @@ public class Menu implements ActionListener, ItemListener {
 		this.menuItem.addActionListener(this);
 		this.menu.add(this.menuItem);
 
+		this.menuItem = new JMenuItem("Reset all", KeyEvent.VK_R);
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		this.menuItem.addActionListener(this);
+		this.menu.add(this.menuItem);
+
 		// ImageIcon icon = createImageIcon("images/middle.gif");
-		this.menuItem = new JMenuItem("Both text and icon");// , icon);
-		this.menuItem.setMnemonic(KeyEvent.VK_B);
-		this.menuItem.addActionListener(this);
-		this.menu.add(this.menuItem);
+		// this.menuItem = new JMenuItem("Both text and icon");// , icon);
+		// this.menuItem.setMnemonic(KeyEvent.VK_B);
+		// this.menuItem.addActionListener(this);
+		// this.menu.add(this.menuItem);
+		//
+		// this.menuItem = new JMenuItem("icon");
+		// this.menuItem.setMnemonic(KeyEvent.VK_D);
+		// this.menuItem.addActionListener(this);
+		// this.menu.add(this.menuItem);
 
-		this.menuItem = new JMenuItem("icon");
-		this.menuItem.setMnemonic(KeyEvent.VK_D);
-		this.menuItem.addActionListener(this);
-		this.menu.add(this.menuItem);
+		// // a group of radio button menu items
+		// this.menu.addSeparator();
+		// ButtonGroup group = new ButtonGroup();
 
-		// a group of radio button menu items
-		this.menu.addSeparator();
-		ButtonGroup group = new ButtonGroup();
-
-		rbMenuItem = new JRadioButtonMenuItem("A radio button menu item");
-		rbMenuItem.setSelected(true);
-		rbMenuItem.setMnemonic(KeyEvent.VK_R);
-		group.add(rbMenuItem);
-		rbMenuItem.addActionListener(this);
-		this.menu.add(rbMenuItem);
-
-		rbMenuItem = new JRadioButtonMenuItem("Another one");
-		rbMenuItem.setMnemonic(KeyEvent.VK_O);
-		group.add(rbMenuItem);
-		rbMenuItem.addActionListener(this);
-		this.menu.add(rbMenuItem);
+		// rbMenuItem = new JRadioButtonMenuItem("A radio button menu item");
+		// rbMenuItem.setSelected(true);
+		// rbMenuItem.setMnemonic(KeyEvent.VK_R);
+		// group.add(rbMenuItem);
+		// rbMenuItem.addActionListener(this);
+		// this.menu.add(rbMenuItem);
+		//
+		// rbMenuItem = new JRadioButtonMenuItem("Another one");
+		// rbMenuItem.setMnemonic(KeyEvent.VK_O);
+		// group.add(rbMenuItem);
+		// rbMenuItem.addActionListener(this);
+		// this.menu.add(rbMenuItem);
 
 		// a submenu
 		this.menu.addSeparator();
@@ -127,6 +131,14 @@ public class Menu implements ActionListener, ItemListener {
 		this.menuBar.add(this.menu);
 
 		this.menuItem = new JMenuItem("Set Printers", KeyEvent.VK_P);
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+		this.menuItem.addActionListener(this);
+		this.menu.add(this.menuItem);
+		this.menuItem = new JMenuItem("Total Today", KeyEvent.VK_P);
+		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+		this.menuItem.addActionListener(this);
+		this.menu.add(this.menuItem);
+		this.menuItem = new JMenuItem("Total Ever", KeyEvent.VK_P);
 		this.menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
 		this.menuItem.addActionListener(this);
 		this.menu.add(this.menuItem);

@@ -187,7 +187,7 @@ public class CashDesk {
 			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL. " + value + " euro");
 		}
 
-		rs = Database.listValuesByName("tatalEver", "settings");
+		rs = Database.listValuesByName("totalEver", "settings");
 		int ever = 0;
 		try {
 			while (rs.next()) {

@@ -389,7 +389,7 @@ public class CashDeskFrame extends JInternalFrame {
 			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("center"));
 			this.doc.insertString(this.doc.getLength(), "ARRIVEDERCI E GRAZIE\n", this.doc.getStyle("small"));
 			this.doc.insertString(this.doc.getLength(), " \n", this.doc.getStyle("icon"));
-			this.doc.insertString(this.doc.getLength(), formattedDate + " - N¡: " + order + "\n", this.doc.getStyle("small"));
+			this.doc.insertString(this.doc.getLength(), formattedDate + " - N: " + order + "\n", this.doc.getStyle("small"));
 
 			this.doc.insertString(this.doc.getLength(), "-NON FISCALE-\n", this.doc.getStyle("small"));
 		} catch (BadLocationException e) {

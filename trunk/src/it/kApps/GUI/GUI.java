@@ -2,8 +2,10 @@ package it.kApps.GUI;
 
 import it.kApps.core.CashDesk;
 import it.kApps.core.Console;
+import it.kApps.core.Database;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,6 +14,8 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -25,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -324,6 +329,79 @@ public class GUI {
 		String action = source.getText();
 		if ("Set Printers".equals(action)) {
 			this.createPrinterPane();
+		}
+		if ("Total Today".equals(action)) {
+			Database.connect();
+			ResultSet rs = Database.listValuesByName("totalToday", "settings");
+			int actual = 0;
+			try {
+				while (rs.next()) {
+					actual = rs.getInt(3);
+				}
+			} catch (SQLException ex) {
+				// ###### DEBUG ######
+				Console.println("[CashDesk] Error in handling database values");
+				// ###################
+			}
+			JOptionPane.showMessageDialog(null, "Il totale di oggi è: " + (actual / 100.) + "0 Euro");
+			Database.disconnect();
+		}
+		if ("Total Ever".equals(action)) {
+			Database.connect();
+			ResultSet rs = Database.listValuesByName("totalEver", "settings");
+			int actual = 0;
+			try {
+				while (rs.next()) {
+					actual = rs.getInt(3);
+				}
+			} catch (SQLException ex) {
+				// ###### DEBUG ######
+				Console.println("[CashDesk] Error in handling database values");
+				// ###################
+			}
+			JOptionPane.showMessageDialog(null, "Il totale dall'inizio della festa è: " + (actual / 100.) + "0 Euro");
+			Database.disconnect();
+		}
+		if ("Start new day".equals(action)) {
+			int result = JOptionPane.showConfirmDialog((Component) null, "Sicuro? il totale di ieri e il numero comande viene resettato!", "alert",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (result == 0) {
+				Database.connect();
+				int actual = 0;
+				Boolean updated = Database.updateTable("settings", "totalToday", "" + actual);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT RESET THE TOTAL. ");
+				}
+				actual = 1;
+				updated = Database.updateTable("settings", "ordersToday", "" + actual);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT RESET THE TOTAL. ");
+				}
+				Database.disconnect();
+			}
+		}
+		if ("Reset all".equals(action)) {
+			int result = JOptionPane.showConfirmDialog((Component) null, "Sicuro? Tutto viene resettato!", "alert",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (result == 0) {
+				Database.connect();
+				int actual = 0;
+				Boolean updated = Database.updateTable("settings", "totalToday", "" + actual);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT RESET THE TOTAL. ");
+				}
+				actual = 1;
+				updated = Database.updateTable("settings", "ordersToday", "" + actual);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT RESET THE TOTAL. ");
+				}
+				actual = 0;
+				updated = Database.updateTable("settings", "totalEver", "" + actual);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT RESET THE TOTAL EVER. ");
+				}
+				Database.disconnect();
+			}
 		}
 
 	}
