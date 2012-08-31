@@ -92,6 +92,10 @@
 			<fileset dir="${build}/classes" excludes="**/*.bak" />
 			<zipfileset src="${shared.lib}/${Database}" />
 		</jar>
+		<copy todir="${dist.jarHome}/db" >  
+        <fileset dir="${basedir}/db" includes="**"/>  
+ </copy>
+		
 	</target>
 
 	<!-- ================== SignJar Target ============================ -->
