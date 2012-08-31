@@ -4,11 +4,9 @@ import it.kApps.core.CashDesk;
 import it.kApps.core.Console;
 import it.kApps.core.Database;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -16,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.print.PrintService;
@@ -33,11 +30,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+/**
+ * The main gui
+ * 
+ * @author Gianmarco Laggia
+ * 
+ */
 public class GUI {
 
 	/**
@@ -55,14 +57,30 @@ public class GUI {
 	 */
 	private static Hashtable<String, JInternalFrame>	intFrames	= new Hashtable<String, JInternalFrame>();
 
-	JTextArea											output;
-	JScrollPane											scrollPane;
+	/**
+	 * The console
+	 */
+	private JTextArea									output;
+	/**
+	 * the scroll pane in the console frame.
+	 */
+	private JScrollPane									scrollPane;
 
-	private static int									minX		= 300;
-	private static int									minY		= 150;
+	/**
+	 * Selection of the printer
+	 */
 	private static JComboBox							cashDesk;
+	/**
+	 * Selection of the printer
+	 */
 	private static JComboBox							kitchen;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param title
+	 *            The title of the window
+	 */
 	public GUI(String title) {
 
 		// ########DEBUG
@@ -78,9 +96,10 @@ public class GUI {
 		}
 
 		mainFrame = new JFrame(title);
+		mainFrame.setUndecorated(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// mainFrame.setIconImage();
-		mainFrame.setSize(minX, minY);
+		mainFrame.setSize(300, 150);
 		// mainFrame.setLocationRelativeTo(null); //USED TO CENTER
 		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
 
@@ -90,9 +109,9 @@ public class GUI {
 
 		this.desktop = new JDesktopPane();
 		mainFrame.setContentPane(this.desktop);
-		FlowLayout fl = new FlowLayout();
 		this.desktop.setLayout(null);
 
+		// Default starts the CashDesk unit
 		this.createCashDeskPane();
 		this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
@@ -105,12 +124,11 @@ public class GUI {
 		mainFrame.setVisible(true);
 	}
 
-	// private void convertButtonActionPerformed(java.awt.event.ActionEvent evt)
-	// {//GEN-FIRST:event_convertButtonActionPerformed
-	// //Parse degrees Celsius as a double and convert to Fahrenheit
-	// Console.println(Console.center("schiacciato"));
-	// }
-
+	/**
+	 * Used to create the <code>InternalFrame</code> of the <code>Console</code> class.
+	 * 
+	 * @return the container
+	 */
 	public Container createConsolePane() {
 
 		if (GUI.intFrames.containsKey("Console")) {
@@ -120,7 +138,7 @@ public class GUI {
 		JInternalFrame intFrame = new JInternalFrame("Console", true, true, true, true);
 		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove
 		// shadows
-		intFrame.setBounds(1050, 0, 150, 50); // min size
+		intFrame.setBounds(1050, 0, 1024, 768); // min size
 		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.desktop.add(intFrame);
 
@@ -134,87 +152,44 @@ public class GUI {
 
 		// Add the text area to the content pane.
 		intFrame.add(this.scrollPane);
-		intFrame.pack();
+		// intFrame.pack();
 		intFrame.setVisible(true);
 		intFrames.put("Console", intFrame);
 
 		return this.desktop;
 	}
 
-	public Container createIngredientPane() {
-
-		if (GUI.intFrames.containsKey("Ingredients")) {
-			if (intFrames.get("Ingredients").isVisible()) {
-				return null;
-			} else {
-				intFrames.get("Ingredients").setVisible(false);
-				this.desktop.remove(intFrames.get("Ingredients"));
-				intFrames.remove("Ingredients");
-				return null;
-			}
-		}
-		JInternalFrame intFrame = new JInternalFrame("Ingredients", true, true, true, true);
-
-		ArrayList<JTextField> tfAdd = new ArrayList<JTextField>();
-		ArrayList<JTextField> tfDelete = new ArrayList<JTextField>();
-
-		intFrame.setBounds(800, 300, 150, 50); // min size
-		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		this.desktop.add(intFrame);
-
-		// Create a scrolled text area.
-		intFrame.setLayout(new BoxLayout(intFrame, BoxLayout.PAGE_AXIS));
-		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
-		intFrame.add(new JLabel("Aggiungi"));
-		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
-		for (int i = 0; i < 4; i++) {
-			JTextField tef = new JTextField();
-			tfAdd.add(tef);
-			intFrame.add(tef);
-		}
-		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
-		intFrame.add(new JLabel("Aggiungi"));
-		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
-		for (int i = 0; i < 4; i++) {
-			JTextField tef = new JTextField();
-			tfDelete.add(tef);
-			intFrame.add(tef);
-		}
-		intFrame.add(Box.createRigidArea(new Dimension(0, 10)));
-
-		JButton btt = new JButton("Ket");
-		Dimension d = new Dimension(60, 40);
-		btt.setBackground(Color.WHITE);
-		btt.setOpaque(true);
-		btt.setPreferredSize(d);
-		btt.setMaximumSize(d);
-		btt.setSize(d);
-		btt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				// GUI.this.convertButtonActionPerformed(evt);
-			}
-		});
-
-		// Add the text area to the content pane.
-		intFrame.add(this.scrollPane);
-		intFrame.pack();
-		intFrame.setVisible(true);
-		intFrames.put("Console", intFrame);
-
-		return this.desktop;
-	}
-
+	/**
+	 * Used to append a string in the console panel.
+	 * 
+	 * @param msg
+	 */
 	public void writeInConsole(String msg) {
+		if (this.output == null) {
+			// ###### DEBUG ######
+			Console.println("[GUI] Error, tried to write in the console, but it is not ready yet.");
+			// ###################
+			return;
+		}
 		this.output.append(msg);
 		this.output.setCaretPosition(this.output.getDocument().getLength());
 	}
 
+	/**
+	 * Get the width of the console panel. TODO not used well
+	 * 
+	 * @return the width
+	 */
 	public int getConsoleWidth(){
 		this.output.repaint();
 		return this.output.getColumns();
 	}
 
+	/**
+	 * Create the <code>InternalFrame</code>, used to set printers property.
+	 * 
+	 * @return container
+	 */
 	public Container createPrinterPane() {
 
 		if(GUI.intFrames.containsKey("Printers")){
@@ -244,17 +219,38 @@ public class GUI {
 		lbl3.setMaximumSize(new Dimension(400, 30));
 		lbl3.setVisible(true);
 
+		Database.connect();
+		ResultSet rs = Database.listValuesByName("printerDesk", "settings");
+		String actual = "";
+		try {
+			while (rs.next()) {
+				actual = rs.getString(3);
+			}
+		} catch (SQLException e) {
+			// ###### DEBUG ######
+			Console.println("[CashDesk] Error in handling database values");
+			// ###################
+		}
 		cashDesk = new JComboBox();
-		PrinterJob pj = PrinterJob.getPrinterJob();
+		int selected = 0;
 		PrintService[] ps = PrinterJob.lookupPrintServices();
 		for (int i = 0; i < ps.length; i++) {
+			if (actual.equals(ps[i].getName())) {
+				selected = i;
+			}
 			cashDesk.addItem(ps[i].getName());
 		}
+		cashDesk.setSelectedIndex(selected);
 
+		selected = 0;
 		kitchen = new JComboBox();
 		for (int i = 0; i < ps.length; i++) {
+			if (actual.equals(ps[i].getName())) {
+				selected = i;
+			}
 			kitchen.addItem(ps[i].getName());
 		}
+		kitchen.setSelectedIndex(selected);
 
 		JButton btt = new JButton("OK");
 		Dimension d = new Dimension(150, 50);
@@ -262,8 +258,11 @@ public class GUI {
 		btt.setMaximumSize(d);
 		btt.setSize(d);
 		btt.addActionListener(new ActionListener() {
+			@SuppressWarnings("synthetic-access")
+			// TODO ocio
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				GUI.setPrinters();
 				GUI.intFrames.get("Printers").setVisible(false);
 			}
 		});
@@ -298,13 +297,33 @@ public class GUI {
 		return this.desktop;
 	}
 
+	protected static void setPrinters() {
+		Database.connect();
+		String actual = (String) cashDesk.getSelectedItem();
+		Boolean updated = Database.updateTable("settings", "printerDesk", actual);
+		if (!updated) {
+			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE DESK PRINTER");
+		}
+		actual = (String) kitchen.getSelectedItem();
+		updated = Database.updateTable("settings", "printerKitchen", actual);
+		if (!updated) {
+			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE KITCHEN PRINTER");
+		}
+		Database.disconnect();
+
+	}
+
+	/**
+	 * Create the <code>InternalFrame</code> for the CashDesk utility.
+	 * 
+	 * @return container
+	 */
 	public Container createCashDeskPane() {
 
 		CashDesk cd = new CashDesk();
 		CashDeskFrame intFrame = new CashDeskFrame(cd);
 		this.desktop.add(intFrame);
 
-		// intFrame.pack();
 		intFrame.setVisible(true);
 		intFrames.put("CashDesk", intFrame);
 
@@ -312,10 +331,23 @@ public class GUI {
 
 		return this.desktop;
 	}
+
+	/**
+	 * Return the hashtable that contains a link to each <code>InternalFrame</code> in the window.
+	 * 
+	 * @return the hashtable.
+	 */
 	public Hashtable<String, JInternalFrame> getIntFrames() {
 		return intFrames;
 	}
 
+	/**
+	 * Return the frame, if is contained.
+	 * 
+	 * @param name
+	 *            the name of the frame
+	 * @return the frame
+	 */
 	public JInternalFrame getFrame(String name) {
 		if (intFrames.containsKey(name)) {
 			return intFrames.get(name);
@@ -324,6 +356,12 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Handles the event from the menu
+	 * 
+	 * @param e
+	 *            the event
+	 */
 	public void menuAction(ActionEvent e) {
 		JMenuItem source = (JMenuItem) (e.getSource());
 		String action = source.getText();
@@ -406,10 +444,20 @@ public class GUI {
 
 	}
 
+	/**
+	 * The desk printer
+	 * 
+	 * @return a string with the name.
+	 */
 	public static String getDeskPrinter() {
 		return (String) cashDesk.getSelectedItem();
 	}
 
+	/**
+	 * The kitchen printer
+	 * 
+	 * @return a string with the name.
+	 */
 	public static String getKitchenPrinter() {
 		return (String) kitchen.getSelectedItem();
 	}

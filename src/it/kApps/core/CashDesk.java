@@ -7,31 +7,78 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
+/**
+ * Main class for the CashDesk, contains all the action called in the GUI
+ * 
+ * @author Gianmarco Laggia
+ * 
+ */
 public class CashDesk {
-	private int							total;
-	private final ArrayList<Product>	prods;
-	private CashDeskFrame				gui;
-	private int							whereTo			= -1;
 
+	/**
+	 * For each client, the total of the order
+	 */
+	private int							total;
+	/**
+	 * Contains the products of the order, reset every client.
+	 */
+	private final ArrayList<Product>	prods;
+	/**
+	 * A link to the gui TODO MVC!
+	 */
+	private CashDeskFrame				gui;
+	/**
+	 * The place where the order should be delivered
+	 */
+	private int							whereTo	= -1;
+
+	/**
+	 * Constructor, set to zero the total and initialize a new <code>ArrayList&lt;String&gt;</code> of the products.
+	 */
 	public CashDesk() {
 		this.total = 0;
 		this.prods = new ArrayList<Product>();
 	}
 
+	/**
+	 * Set the GUI with the class have to interact
+	 * 
+	 * @param g
+	 *            The GUI
+	 */
 	public void setGui(CashDeskFrame g) {
 		this.gui = g;
 	}
 
+	/**
+	 * Set the place where the order should be delivered.<br>
+	 * 
+	 * @param table
+	 */
 	public void setWhereTo(int table) {
 		this.whereTo = table;
 	}
 
-	public int getWhereTo(){
+	/**
+	 * Get Where to
+	 * 
+	 * @return the location integer
+	 */
+	public int getWhereTo() {
 		return this.whereTo;
 	}
 
+	/**
+	 * Returns an <code>ArrayList&lt;String&gt;</code> containing the names of the products' names that refers to the
+	 * bar.
+	 * 
+	 * @return The products
+	 */
 	public ArrayList<String> getBarProd() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < this.prods.size(); i++) {
@@ -43,36 +90,67 @@ public class CashDesk {
 		return list;
 	}
 
+	/**
+	 * Returns an <code>ArrayList&lt;String&gt;</code> containing the names of the products' names that refers to the
+	 * kitchen.
+	 * 
+	 * @return The products
+	 */
 	public ArrayList<String> getKitchenProd() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
-			if (p.getCat().equals("0") || p.getCat().equals("3") || p.getCat().equals("5")) {
+			if (p.getCat().equals("0") || p.getCat().equals("3")) {
 				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves());
 			}
 		}
 		return list;
 	}
 
+	/**
+	 * Returns an <code>ArrayList&lt;String&gt;</code> containing the names of the products' names that refers to the
+	 * back kitchen.
+	 * 
+	 * @return The products
+	 */
 	public ArrayList<String> getFriedProd() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
-			if (p.getCat().equals("4")) {
+			if (p.getCat().equals("4") || p.getCat().equals("5")) {
 				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves());
 			}
 		}
 		return list;
 	}
 
+	/**
+	 * The total of the current order
+	 * 
+	 * @return int the value <u>(multiplied for 100)</u> of the total
+	 */
 	public int getTotal() {
 		return this.total;
 	}
 
+	/**
+	 * Return the products selected in this order
+	 * 
+	 * @return <code>ArrayList&lt;String&gt;</code> containings products' names.
+	 */
 	public ArrayList<Product> getProds() {
 		return this.prods;
 	}
 
+	/**
+	 * Update the local total (the total of this order)
+	 * 
+	 * @param sum
+	 *            The value to operate
+	 * @param operator
+	 *            The operator (plus or minus)
+	 * @return The result of the operation
+	 */
 	private int updateTotal(int sum, String operator) {
 		if ("-".equals(operator)) {
 			this.total -= sum;
@@ -85,6 +163,11 @@ public class CashDesk {
 		return this.total;
 	}
 
+	/**
+	 * Prepare the class for a new order.<br>
+	 * Ask the update of the <code>totalEver</code> and the <code>totalToday</code> in the database, reset the GUI to
+	 * zero.
+	 */
 	private void newClient() {
 		this.incrementTotalDB(this.total);
 		this.total = 0;
@@ -94,16 +177,24 @@ public class CashDesk {
 		this.gui.repaintText();
 	}
 
+	/**
+	 * Handles the action of each button in the gui, referring to its text
+	 * 
+	 * @param text
+	 *            The text of the pressed button
+	 * @param free
+	 *            True if the product should be free TODO not corret to be here this. MVC!
+	 */
 	public void buttonEvent(String text, boolean free) {
-		if ("<".equals(text)){
+		if ("<".equals(text)) {
 			Product p = this.prods.remove(this.prods.size() - 1);
 			this.updateTotal(p.getPrice(), "-");
-		}else if("X".equals(text)){
+		} else if ("X".equals(text)) {
 			this.total = 0;
 			this.prods.clear();
 			this.whereTo = -1;
 			this.gui.resetWhereTo();
-		}else if("Conferma".equals(text)){
+		} else if ("Conferma".equals(text)) {
 			if (this.whereTo == -1) {
 				JOptionPane.showMessageDialog((Component) null, "DEVI SELEZIONARE UN TAVOLO");
 				return;
@@ -115,15 +206,14 @@ public class CashDesk {
 			this.gui.print();
 			this.incrementOrderNum();
 			this.newClient();
-			// if (this.gui.print()) {
-			//
-			// }
 
-		}else if("Ket".equals(text)){
+		} else if ("Ket".equals(text)) {
 			this.prods.add(new Product("Ketchup"));
-		}else if("May".equals(text)){
+		} else if ("May".equals(text)) {
 			this.prods.add(new Product("Maionese"));
-		}else if("Temp.Amb.".equals(text)) {
+		} else if ("S.Rosa".equals(text)) {
+			this.prods.add(new Product("Salsa Rosa"));
+		} else if ("Temp.Amb.".equals(text)) {
 			this.prods.get(this.prods.size() - 1).addToName("Temp.Ambiente");
 		} else if ("Sfogliata Fantasia".equals(text) || "Toast Farcito".equals(text)) {
 			Product p = new Product(text, free);
@@ -133,12 +223,21 @@ public class CashDesk {
 			if (!free) {
 				this.updateTotal(p.getPrice(), "+");
 			}
-		} else if ("Togli".equals(text)) {
+		} else if ("CavaMeti".equals(text)) {
+
+			JTextField add = new JTextField();
+			JTextField remove = new JTextField();
+			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove };
+			JOptionPane.showMessageDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
 			if (this.prods.size() > 0) {
-				String ing = JOptionPane.showInputDialog("Cosa vuoi togliere?");
-				this.prods.get(this.prods.size() - 1).setRemoves(ing);
+				if (!"".equals(add.getText())) {
+					this.prods.get(this.prods.size() - 1).setAdds(add.getText());
+				}
+				if (!"".equals(remove.getText())) {
+					this.prods.get(this.prods.size() - 1).setRemoves(remove.getText());
+				}
 			}
-		}else{
+		} else {
 			Product p = new Product(text, free);
 			this.prods.add(p);
 			if (!free) {
@@ -148,6 +247,9 @@ public class CashDesk {
 		this.gui.repaintText();
 	}
 
+	/**
+	 * Increments the order num in the database
+	 */
 	private void incrementOrderNum() {
 		Database.connect();
 		ResultSet rs = Database.listValuesByName("ordersToday", "settings");
@@ -168,6 +270,13 @@ public class CashDesk {
 		}
 		Database.disconnect();
 	}
+
+	/**
+	 * Increments the total by the value in the database.
+	 * 
+	 * @param value
+	 *            The value to sum
+	 */
 	private void incrementTotalDB(int value) {
 		Database.connect();
 		ResultSet rs = Database.listValuesByName("totalToday", "settings");
@@ -206,6 +315,11 @@ public class CashDesk {
 		Database.disconnect();
 	}
 
+	/**
+	 * Read from the database the actual number of the order
+	 * 
+	 * @return An integer, number of the next order
+	 */
 	public String getActualOrder() {
 		Database.connect();
 		ResultSet rs = Database.listValuesByName("ordersToday", "settings");
