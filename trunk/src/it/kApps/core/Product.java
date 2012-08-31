@@ -14,6 +14,7 @@ public class Product {
 	private String				addToName	= "";
 	private final ArrayList<String>	adds		= new ArrayList<String>();
 	private final ArrayList<String>	removes		= new ArrayList<String>();
+	private final ArrayList<String>	variations	= new ArrayList<String>();
 
 	public Product(String productName, boolean free) {
 		this.name = productName;
@@ -53,6 +54,9 @@ public class Product {
 	public void setRemoves(String ing) {
 		this.removes.add(ing);
 	}
+	public void setVariations(String ing) {
+		this.variations.add(ing);
+	}
 
 	public String getAdds() {
 		String s = "";
@@ -66,6 +70,13 @@ public class Product {
 		String s = "";
 		for (int i = 0; i < this.removes.size(); i++) {
 			s += "\n TOGLI: " + this.removes.get(i);
+		}
+		return s;
+	}
+	public String getVariations() {
+		String s = "";
+		for (int i = 0; i < this.variations.size(); i++) {
+			s += "\n\t" + this.variations.get(i);
 		}
 		return s;
 	}

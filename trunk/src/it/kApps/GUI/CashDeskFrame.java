@@ -57,6 +57,7 @@ public class CashDeskFrame extends JInternalFrame {
 	private Hashtable<String, JButton>	buttons;
 	private final JTextPane				textPane;
 	private final JComboBox					whereTo;
+	private JLabel total;
 	private final JCheckBox				free;
 	private final StyledDocument doc;
 	private final CashDesk				core;
@@ -152,7 +153,7 @@ public class CashDeskFrame extends JInternalFrame {
 		JPanel other = new JPanel();
 		other.setLayout(new BoxLayout(other, BoxLayout.PAGE_AXIS));
 
-		Dimension dim = new Dimension(250, 500);
+		Dimension dim = new Dimension(250, 350);
 		this.textPane = new JTextPane();
 		this.textPane.setMargin(new Insets(10, 10, 10, 10));
 		this.textPane.setSize(dim);
@@ -183,12 +184,23 @@ public class CashDeskFrame extends JInternalFrame {
 			}
 		});
 
-
+		total = new JLabel("0,00");
+		total.setFont(new Font("Sans serif",Font.PLAIN,80));
+		dim = new Dimension(250,90);
+		total.setMaximumSize(dim);
+		total.setPreferredSize(dim);
+		total.setHorizontalAlignment(SwingConstants.CENTER);
+		JPanel totalP = new JPanel();
+		totalP.setLayout(new BoxLayout(totalP,BoxLayout.LINE_AXIS));
+		totalP.add(total);
+		
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
 		other.add(this.whereTo);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
 		other.add(scroll);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
+		other.add(totalP);
+		other.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		this.free = new JCheckBox("Gratis");
 		JPanel freeAndAddons = new JPanel();
@@ -284,6 +296,7 @@ public class CashDeskFrame extends JInternalFrame {
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
 		other.add(salse);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
+		
 
 		JButton confirm = new JButton("Conferma");
 		d = new Dimension(160, 60);
@@ -456,7 +469,6 @@ public class CashDeskFrame extends JInternalFrame {
 		@Override
 		protected Object doInBackground() {
 			try {
-				PrinterJob pj = PrinterJob.getPrinterJob();
 				PrintService[] ps = PrinterJob.lookupPrintServices();
 				for (int i = 0; i < ps.length; i++) {
 					if (ps[i].getName().equals(GUI.getDeskPrinter())) {
@@ -555,13 +567,20 @@ public class CashDeskFrame extends JInternalFrame {
 	public void resetWhereTo() {
 		this.whereTo.setSelectedIndex(0);
 	}
+	
+	public void paintTotal(){
+		total.setText(this.core.getTotal() / 100.+"0");
+	}
 
 	public void repaintText() {
 		this.clearText();
 		if (this.core.getProds() != null && this.core.getProds().size() != 0) {
+			this.paintTotal();
 			this.paintHeader();
 			this.paintBody();
 			this.paintFooter();
+		}else{
+			this.total.setText("0,00");
 		}
 	}
 

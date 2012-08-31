@@ -84,7 +84,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("1") || p.getCat().equals("2")) {
-				list.add(p.getCompleteName() + p.getAdds());
+				list.add(p.getCompleteName() + p.getAdds()+ p.getVariations());
 			}
 		}
 		return list;
@@ -101,7 +101,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("0") || p.getCat().equals("3")) {
-				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves());
+				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves()+ p.getVariations());
 			}
 		}
 		return list;
@@ -118,7 +118,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("4") || p.getCat().equals("5")) {
-				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves());
+				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves()+ p.getVariations());
 			}
 		}
 		return list;
@@ -205,6 +205,7 @@ public class CashDesk {
 			}
 			this.gui.print();
 			this.incrementOrderNum();
+			JOptionPane.showMessageDialog(null, "Conferma per cancellare");
 			this.newClient();
 
 		} else if ("Ket".equals(text)) {
@@ -229,7 +230,8 @@ public class CashDesk {
 
 			JTextField add = new JTextField();
 			JTextField remove = new JTextField();
-			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove };
+			JTextField variation = new JTextField();
+			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove, new JLabel("Annotazioni"), variation };
 			JOptionPane.showMessageDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
 			if (this.prods.size() > 0) {
 				if (!"".equals(add.getText())) {
@@ -237,6 +239,9 @@ public class CashDesk {
 				}
 				if (!"".equals(remove.getText())) {
 					this.prods.get(this.prods.size() - 1).setRemoves(remove.getText());
+				}
+				if (!"".equals(variation.getText())) {
+					this.prods.get(this.prods.size() - 1).setVariations(remove.getText());
 				}
 			}
 		} else {
