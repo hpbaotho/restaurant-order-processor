@@ -74,7 +74,6 @@ public class CashDeskFrame extends JInternalFrame {
 		this.setTitle("Cash Desk v3.0");
 		// this.putClientProperty("JInternalFrame.frameType", "normal");
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-		new Database("xdb", "testdb");
 		Database.start();
 		Database.connect();
 
@@ -99,10 +98,11 @@ public class CashDeskFrame extends JInternalFrame {
 			lbl.setVisible(true);
 			for (int j = 0; j < bts.size(); j++) {
 				JButton btt = new JButton(bts.get(j));
-				Dimension d = new Dimension(160, 35);
+				Dimension d = new Dimension(130, 35);
 				btt.setPreferredSize(d);
 				btt.setMaximumSize(d);
 				btt.setSize(d);
+				btt.setMargin(new Insets(2, 2, 2, 2));
 				p.add(Box.createRigidArea(new Dimension(0, 5)));
 				p.add(btt);
 				btt.addActionListener(new ActionListener() {
@@ -126,10 +126,11 @@ public class CashDeskFrame extends JInternalFrame {
 					lbl2.setVisible(true);
 					for (int j = 0; j < bts2.size(); j++) {
 						JButton btt = new JButton(bts2.get(j));
-						Dimension d = new Dimension(160, 35);
+						Dimension d = new Dimension(130, 35);
 						btt.setPreferredSize(d);
 						btt.setMaximumSize(d);
 						btt.setSize(d);
+						btt.setMargin(new Insets(2, 2, 2, 2));
 						p.add(Box.createRigidArea(new Dimension(0, 5)));
 						p.add(btt);
 						btt.addActionListener(new ActionListener() {
@@ -151,7 +152,7 @@ public class CashDeskFrame extends JInternalFrame {
 		JPanel other = new JPanel();
 		other.setLayout(new BoxLayout(other, BoxLayout.PAGE_AXIS));
 
-		Dimension dim = new Dimension(300, 500);
+		Dimension dim = new Dimension(250, 500);
 		this.textPane = new JTextPane();
 		this.textPane.setMargin(new Insets(10, 10, 10, 10));
 		this.textPane.setSize(dim);
@@ -173,7 +174,7 @@ public class CashDeskFrame extends JInternalFrame {
 		}
 		this.whereTo.addItem("AL BANCO");
 		this.whereTo.setSelectedIndex(0);
-		this.whereTo.setMaximumSize(new Dimension(300, 20));
+		this.whereTo.setMaximumSize(new Dimension(250, 20));
 		this.whereTo.setBackground(Color.WHITE);
 		this.whereTo.addActionListener(new ActionListener() {
 			@Override
@@ -185,13 +186,15 @@ public class CashDeskFrame extends JInternalFrame {
 
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
 		other.add(this.whereTo);
-		other.add(Box.createRigidArea(new Dimension(0, 10)));
+		other.add(Box.createRigidArea(new Dimension(0, 5)));
 		other.add(scroll);
-		other.add(Box.createRigidArea(new Dimension(0, 10)));
+		other.add(Box.createRigidArea(new Dimension(0, 5)));
 
 		this.free = new JCheckBox("Gratis");
-		JPanel freeAndOther = new JPanel();
-		freeAndOther.setLayout(new BoxLayout(freeAndOther, BoxLayout.LINE_AXIS));
+		JPanel freeAndAddons = new JPanel();
+		freeAndAddons.setLayout(new BoxLayout(freeAndAddons, BoxLayout.LINE_AXIS));
+		JPanel salse = new JPanel();
+		freeAndAddons.setLayout(new BoxLayout(freeAndAddons, BoxLayout.LINE_AXIS));
 
 		JButton ketchup = new JButton("Ket");
 		Dimension d = new Dimension(60, 40);
@@ -236,36 +239,54 @@ public class CashDeskFrame extends JInternalFrame {
 				CashDeskFrame.this.convertButtonActionPerformed(evt);
 			}
 		});
-		JButton remove = new JButton("Togli");
+		JButton addRemove = new JButton("CavaMeti");
 		d = new Dimension(80, 40);
-		remove.setMargin(new Insets(2, 2, 2, 2));
-		remove.setBackground(Color.WHITE);
-		remove.setOpaque(true);
-		remove.setPreferredSize(d);
-		remove.setMaximumSize(d);
-		remove.setSize(d);
-		remove.addActionListener(new ActionListener() {
+		addRemove.setMargin(new Insets(2, 2, 2, 2));
+		addRemove.setBackground(Color.WHITE);
+		addRemove.setOpaque(true);
+		addRemove.setPreferredSize(d);
+		addRemove.setMaximumSize(d);
+		addRemove.setSize(d);
+		addRemove.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				CashDeskFrame.this.convertButtonActionPerformed(evt);
+			}
+		});
+		JButton pink = new JButton("S.Rosa");
+		d = new Dimension(80, 40);
+		pink.setMargin(new Insets(2, 2, 2, 2));
+		pink.setBackground(Color.WHITE);
+		pink.setOpaque(true);
+		pink.setPreferredSize(d);
+		pink.setMaximumSize(d);
+		pink.setSize(d);
+		pink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				CashDeskFrame.this.convertButtonActionPerformed(evt);
 			}
 		});
 
-		freeAndOther.add(this.free);
-		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
-		freeAndOther.add(ketchup);
-		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
-		freeAndOther.add(mayonnaise);
-		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
-		freeAndOther.add(hot);
-		freeAndOther.add(Box.createRigidArea(new Dimension(10, 0)));
-		freeAndOther.add(remove);
+		freeAndAddons.add(this.free);
+		freeAndAddons.add(Box.createRigidArea(new Dimension(10, 0)));
+		freeAndAddons.add(addRemove);
+		freeAndAddons.add(Box.createRigidArea(new Dimension(10, 0)));
+		freeAndAddons.add(hot);
 
-		other.add(freeAndOther);
-		other.add(Box.createRigidArea(new Dimension(0, 10)));
+		salse.add(ketchup);
+		salse.add(Box.createRigidArea(new Dimension(10, 0)));
+		salse.add(mayonnaise);
+		salse.add(Box.createRigidArea(new Dimension(10, 0)));
+		salse.add(pink);
+
+		other.add(freeAndAddons);
+		other.add(Box.createRigidArea(new Dimension(0, 5)));
+		other.add(salse);
+		other.add(Box.createRigidArea(new Dimension(0, 5)));
 
 		JButton confirm = new JButton("Conferma");
-		d = new Dimension(200, 60);
+		d = new Dimension(160, 60);
 		confirm.setBackground(new Color(66, 226, 92));
 		confirm.setOpaque(true);
 		confirm.setPreferredSize(d);

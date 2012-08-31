@@ -201,7 +201,7 @@ public class Database {
 			// ###### DEBUG ######
 			Console.println(CN + "Creating table 'settings'");
 			// ###################
-			Database.connection.prepareStatement("CREATE TABLE settings (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, value VARCHAR(30));").execute();
+			Database.connection.prepareStatement("CREATE TABLE settings (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, value VARCHAR(100));").execute();
 
 			// ###### DEBUG ######
 			Console.println(CN + "Structure created!");
