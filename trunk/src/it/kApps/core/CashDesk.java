@@ -218,12 +218,14 @@ public class CashDesk {
 		} else if ("Sfogliata Fantasia".equals(text) || "Toast Farcito".equals(text)) {
 			Product p = new Product(text, free);
 			String ing = JOptionPane.showInputDialog("Inserisci gli ingredienti");
-			p.setAdds(ing);
-			this.prods.add(p);
-			if (!free) {
-				this.updateTotal(p.getPrice(), "+");
+			if(ing!=null && !"".equals(ing)){
+				p.setAdds(ing);
+				this.prods.add(p);
+				if (!free) {
+					this.updateTotal(p.getPrice(), "+");
+				}
 			}
-		} else if ("CavaMeti".equals(text)) {
+		} else if ("Variaz.".equals(text)) {
 
 			JTextField add = new JTextField();
 			JTextField remove = new JTextField();
