@@ -1,5 +1,5 @@
 totalToday!0
-totalEver!0
-ordersToday!1
+totalEver!35230
+ordersToday!0
 printerDesk!none
 printerKitchen!none

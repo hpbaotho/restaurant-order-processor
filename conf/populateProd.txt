@@ -8,7 +8,7 @@ Ecologico!0!0!500
 Pagoda!0!0!500
 Proximus!0!0!500
 Sardon!0!0!500
-Solidarietˆ!0!0!500
+Solidarieta!0!0!500
 Sorriso!0!0!500
 Bionda Piccola!1!0!200
 Bionda Media!1!0!300
@@ -40,14 +40,14 @@ Panino Cotto!3!0!300
 Panino Crudo!3!0!300
 Panino Salame!3!0!300
 Panino Speck!3!0!300
-Crepe cotto!3!0!350
-Crepe crudo!3!0!400
-Crepe formaggio!3!0!400
-Crepe cotto/form!3!0!400
+Crepes cotto!3!0!350
+Crepes crudo!3!0!400
+Crepes formaggio!3!0!400
+Crepes cotto/form!3!0!400
 Patatine Fritte!4!0!200
-Mozz.Carr. PROSC!4!0!250
-Mozz.Carr. ACCIUG!4!0!250
+Mozz.Carr. PROSC!4!0!150
+Mozz.Carr. ACCIUG!4!0!150
 Tiramisu!5!0!250
 Zuppa Inglese!5!0!250
-Crepe Nutella!5!0!400
-Crepe Marmellata!5!0!400
+Crepes Nutella!5!0!400
+Crepes Marmellata!5!0!400
