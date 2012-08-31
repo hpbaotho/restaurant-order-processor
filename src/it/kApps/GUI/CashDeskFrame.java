@@ -239,7 +239,7 @@ public class CashDeskFrame extends JInternalFrame {
 				CashDeskFrame.this.convertButtonActionPerformed(evt);
 			}
 		});
-		JButton addRemove = new JButton("CavaMeti");
+		JButton addRemove = new JButton("Variaz.");
 		d = new Dimension(80, 40);
 		addRemove.setMargin(new Insets(2, 2, 2, 2));
 		addRemove.setBackground(Color.WHITE);
@@ -351,7 +351,7 @@ public class CashDeskFrame extends JInternalFrame {
 
 	private void paintHeader() {
 		try {
-			this.doc.setParagraphAttributes(0, this.doc.getLength(), this.doc.getStyle("blue"), false);
+			//this.doc.setParagraphAttributes(0, this.doc.getLength(), this.doc.getStyle("blue"), false);
 			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("center"));
 			this.doc.insertString(this.doc.getLength(), "FESTA CON NOI 2012\n", this.doc.getStyle("regular"));
 			this.doc.insertString(this.doc.getLength(), "Paninoteca Aladino\n", this.doc.getStyle("aladino"));
@@ -365,7 +365,6 @@ public class CashDeskFrame extends JInternalFrame {
 			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("left"));
 
 			String order = this.core.getActualOrder();
-			Double total = this.core.getTotal() / 100.;
 
 			ArrayList<String> val = this.core.getBarProd();
 			if (val.size() > 0) {
@@ -394,7 +393,6 @@ public class CashDeskFrame extends JInternalFrame {
 				}
 			}
 			this.doc.insertString(this.doc.getLength(), "\n\n", this.doc.getStyle("regular"));
-			this.doc.insertString(this.doc.getLength(), "Totale: " + total + "0 E\n\n", this.doc.getStyle("regular"));
 		} catch (BadLocationException e) {
 
 		}
@@ -402,6 +400,8 @@ public class CashDeskFrame extends JInternalFrame {
 
 	public void paintFooter() {
 		try {
+			Double total = this.core.getTotal() / 100.;
+			this.doc.insertString(this.doc.getLength(), "Totale: " + total + "0 E\n\n", this.doc.getStyle("regular"));
 			Date todaysDate = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 			String formattedDate = formatter.format(todaysDate);

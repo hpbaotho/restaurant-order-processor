@@ -15,8 +15,8 @@ Bionda Media!1!0!300
 Rossa Piccola!1!0!270
 Rossa Media!1!1!370
 Birra Speciale!1!0!400
-Acqua 0.5 Litro!1!0!100
-Acqua 1.5 Litri!1!0!200
+Acqua Naturale!1!0!100
+Acqua Frizzante!1!0!100
 The Pesca!1!0!200
 The Limone!1!0!200
 Coca Cola!1!0!200
