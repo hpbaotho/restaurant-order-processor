@@ -96,7 +96,7 @@ public class GUI {
 		}
 
 		mainFrame = new JFrame(title);
-		mainFrame.setUndecorated(true);
+		mainFrame.setUndecorated(false);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// mainFrame.setIconImage();
 		mainFrame.setSize(300, 150);
@@ -381,7 +381,7 @@ public class GUI {
 				Console.println("[CashDesk] Error in handling database values");
 				// ###################
 			}
-			JOptionPane.showMessageDialog(null, "Il totale di oggi è: " + (actual / 100.) + "0 Euro");
+			JOptionPane.showMessageDialog(null, "Il totale di oggi ÔøΩ: " + (actual / 100.) + "0 Euro");
 			Database.disconnect();
 		}
 		if ("Total Ever".equals(action)) {
@@ -397,7 +397,7 @@ public class GUI {
 				Console.println("[CashDesk] Error in handling database values");
 				// ###################
 			}
-			JOptionPane.showMessageDialog(null, "Il totale dall'inizio della festa è: " + (actual / 100.) + "0 Euro");
+			JOptionPane.showMessageDialog(null, "Il totale dall'inizio della festa ÔøΩ: " + (actual / 100.) + "0 Euro");
 			Database.disconnect();
 		}
 		if ("Start new day".equals(action)) {
