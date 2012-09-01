@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -205,7 +206,7 @@ public class CashDesk {
 			}
 			this.gui.print();
 			this.incrementOrderNum();
-			JOptionPane.showMessageDialog(null, "Conferma per cancellare");
+			JOptionPane.showMessageDialog(null, "Ordine andato a buon fine");
 			this.newClient();
 
 		} else if ("Ket".equals(text)) {
@@ -215,12 +216,12 @@ public class CashDesk {
 		} else if ("S.Rosa".equals(text)) {
 			this.prods.add(new Product("Salsa Rosa"));
 		} else if ("Temp.Amb.".equals(text)) {
-			this.prods.get(this.prods.size() - 1).addToName("Temp.Ambiente");
+			this.prods.get(this.prods.size() - 1).setVariations("Temp.Ambiente");
 		} else if ("Sfogliata Fantasia".equals(text) || "Toast Farcito".equals(text)) {
 			Product p = new Product(text, free);
 			String ing = JOptionPane.showInputDialog("Inserisci gli ingredienti");
 			if(ing!=null && !"".equals(ing)){
-				p.setAdds(ing);
+				p.setAdds(ing,Integer.parseInt(ing));
 				this.prods.add(p);
 				if (!free) {
 					this.updateTotal(p.getPrice(), "+");
@@ -231,11 +232,25 @@ public class CashDesk {
 			JTextField add = new JTextField();
 			JTextField remove = new JTextField();
 			JTextField variation = new JTextField();
-			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove, new JLabel("Annotazioni"), variation };
-			JOptionPane.showMessageDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
+			JCheckBox cb = new JCheckBox("Aggiungi prezzo");
+			JTextField quanti = new JTextField();
+			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove, new JLabel("Annotazioni"), variation,cb,new JLabel("N. ingredienti"),quanti };
+			JOptionPane.showMessageDialog(null, inputs, "Aggiungi o togli ingrediente", JOptionPane.PLAIN_MESSAGE);
 			if (this.prods.size() > 0) {
 				if (!"".equals(add.getText())) {
-					this.prods.get(this.prods.size() - 1).setAdds(add.getText());
+					Product p = this.prods.get(this.prods.size()-1);
+					if(cb.isSelected() && !"".equals(quanti.getText())){
+						int i = 0;
+						if("".equals(quanti.getText())){
+							i = 1;
+						}else{
+							i = Integer.parseInt(quanti.getText());
+						}
+						p.setAdds(add.getText(),i);
+						this.updateTotal(50*i, "+");
+					}else{
+						p.setAdds(add.getText(),0);
+					}
 				}
 				if (!"".equals(remove.getText())) {
 					this.prods.get(this.prods.size() - 1).setRemoves(remove.getText());
