@@ -569,7 +569,7 @@ public class CashDeskFrame extends JInternalFrame {
 	}
 	
 	public void paintTotal(){
-		total.setText(this.core.getTotal() / 100.+"0");
+		total.setText((this.core.getTotal() / 100.+"0").replace('.', ','));
 	}
 
 	public void repaintText() {

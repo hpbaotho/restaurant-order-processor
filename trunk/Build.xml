@@ -92,9 +92,16 @@
 			<fileset dir="${build}/classes" excludes="**/*.bak" />
 			<zipfileset src="${shared.lib}/${Database}" />
 		</jar>
-		<copy todir="${dist.jarHome}/db" >  
-        <fileset dir="${basedir}/db" includes="**"/>  
- </copy>
+		
+	<copy todir="${dist.jarHome}/db" >  
+	        <fileset dir="${basedir}/db" includes="**"/>  
+	 </copy>
+		<copy todir="${dist.jarHome}/res" >  
+		        <fileset dir="${basedir}/res" includes="**"/>  
+		 </copy>
+		<copy todir="${dist.jarHome}/images" >  
+		        <fileset dir="${basedir}/images" includes="**"/>  
+		 </copy>
 		
 	</target>
 
