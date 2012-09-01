@@ -3,7 +3,6 @@ package it.kApps.core;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 public class Product {
 
@@ -23,7 +22,7 @@ public class Product {
 		try {
 			while (rs.next()) {
 				this.cat = "" + rs.getInt(3);
-				this.ingredients = rs.getString(4).split(PagodaConstants.SPLIT_CHAR);
+				this.ingredients = rs.getString(4).split("!");
 				this.price = rs.getInt(5);
 			}
 		} catch (SQLException e) {
