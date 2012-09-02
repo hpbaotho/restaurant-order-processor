@@ -173,8 +173,8 @@ public class CashDesk {
 		this.incrementTotalDB(this.total);
 		this.total = 0;
 		this.prods.clear();
-		this.whereTo = -1;
 		this.gui.resetWhereTo();
+		this.whereTo = -1;
 		this.gui.repaintText();
 	}
 
@@ -193,8 +193,8 @@ public class CashDesk {
 		} else if ("X".equals(text)) {
 			this.total = 0;
 			this.prods.clear();
-			this.whereTo = -1;
 			this.gui.resetWhereTo();
+			this.whereTo = -1;
 		} else if ("Conferma".equals(text)) {
 			if (this.whereTo == -1) {
 				JOptionPane.showMessageDialog((Component) null, "DEVI SELEZIONARE UN TAVOLO");
