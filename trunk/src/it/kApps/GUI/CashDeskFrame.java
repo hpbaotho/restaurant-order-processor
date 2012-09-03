@@ -11,20 +11,12 @@ import java.awt.FontFormatException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 
-import javax.print.PrintService;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.MediaPrintableArea;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -39,7 +31,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -54,40 +45,40 @@ import javax.swing.text.StyledDocument;
  */
 public class CashDeskFrame extends JInternalFrame {
 
-	private Hashtable<String, JButton>	buttons;
-	private final JTextPane				textPane;
-	private final JComboBox					whereTo;
-	private JLabel total;
-	private final JCheckBox				free;
-	private final StyledDocument doc;
-	private final CashDesk				core;
+	/**
+	 * Generated serialVersionUID
+	 */
+	private static final long	serialVersionUID	= 1849321179964730683L;
+	private static JTextPane				textPane;
+	private static JComboBox					WHERE_TO;
+	private static JLabel TOTAL;
+	private static JCheckBox				free;
+	private static StyledDocument DOC;
 
 	/**
 	 * Main constructor, create the frame with each button for each product.
 	 */
-	public CashDeskFrame(CashDesk core) {
+	public CashDeskFrame() {
 		super();
-		this.core = core;
-		core.setGui(this);
-		this.setIconifiable(true);
-		this.setClosable(true);
-		this.setResizable(true);
-		this.setTitle("Cash Desk v3.0");
-		// this.putClientProperty("JInternalFrame.frameType", "normal");
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		setIconifiable(true);
+		setClosable(true);
+		setResizable(true);
+		setTitle("Cash Desk v3.0");
+		// putClientProperty("JInternalFrame.frameType", "normal");
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		Database.start();
 		Database.connect();
 
 		ArrayList<String> cat = Database.listTableValues("categories");
 
-		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
-		this.add(Box.createRigidArea(new Dimension(10, 0)));
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.LINE_AXIS));
+		add(Box.createRigidArea(new Dimension(10, 0)));
 
 		for (int i = 0; i < cat.size(); i++) {
 			JPanel p = new JPanel();
 			p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 			p.setVisible(true);
-			this.add(p);
+			add(p);
 			p.add(Box.createRigidArea(new Dimension(0, 5)));
 
 			ArrayList<String> bts = Database.listTableValues("products WHERE CAT=" + i);
@@ -109,7 +100,7 @@ public class CashDeskFrame extends JInternalFrame {
 				btt.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						CashDeskFrame.this.convertButtonActionPerformed(evt);
+						CashDeskFrame.convertButtonActionPerformed(evt);
 					}
 				});
 			}
@@ -137,7 +128,7 @@ public class CashDeskFrame extends JInternalFrame {
 						btt.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(java.awt.event.ActionEvent evt) {
-								CashDeskFrame.this.convertButtonActionPerformed(evt);
+								CashDeskFrame.convertButtonActionPerformed(evt);
 							}
 						});
 					}
@@ -145,22 +136,22 @@ public class CashDeskFrame extends JInternalFrame {
 				}
 			}
 			p.add(Box.createVerticalGlue());
-			this.add(Box.createRigidArea(new Dimension(10, 0)));
+			add(Box.createRigidArea(new Dimension(10, 0)));
 
 		}
-		this.add(Box.createRigidArea(new Dimension(10, 0)));
+		add(Box.createRigidArea(new Dimension(10, 0)));
 
 		JPanel other = new JPanel();
 		other.setLayout(new BoxLayout(other, BoxLayout.PAGE_AXIS));
 
 		Dimension dim = new Dimension(250, 350);
-		this.textPane = new JTextPane();
-		this.textPane.setMargin(new Insets(10, 10, 10, 10));
-		this.textPane.setSize(dim);
-		this.doc = this.textPane.getStyledDocument();
-		this.addStylesToDocument(this.doc);
+		textPane = new JTextPane();
+		textPane.setMargin(new Insets(10, 10, 10, 10));
+		textPane.setSize(dim);
+		DOC = textPane.getStyledDocument();
+		addStylesToDocument(DOC);
 
-		JScrollPane scroll = new JScrollPane(this.textPane);
+		JScrollPane scroll = new JScrollPane(textPane);
 		scroll.setMaximumSize(dim);
 		scroll.setPreferredSize(dim);
 		scroll.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -168,41 +159,41 @@ public class CashDeskFrame extends JInternalFrame {
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 
-		this.whereTo = new JComboBox();
-		this.whereTo.addItem("SELEZIONA IL TAVOLO");
+		WHERE_TO = new JComboBox();
+		WHERE_TO.addItem("SELEZIONA IL TAVOLO");
 		for (int i = 1; i < 30; i++) {
-			this.whereTo.addItem("Tavolo n." + i);
+			WHERE_TO.addItem("Tavolo n." + i);
 		}
-		this.whereTo.addItem("AL BANCO");
-		this.whereTo.setSelectedIndex(0);
-		this.whereTo.setMaximumSize(new Dimension(250, 20));
-		this.whereTo.setBackground(Color.WHITE);
-		this.whereTo.addActionListener(new ActionListener() {
+		WHERE_TO.addItem("AL BANCO");
+		WHERE_TO.setSelectedIndex(0);
+		WHERE_TO.setMaximumSize(new Dimension(250, 20));
+		WHERE_TO.setBackground(Color.WHITE);
+		WHERE_TO.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.whereTo(evt);
+				CashDeskFrame.whereTo(evt);
 			}
 		});
 
-		total = new JLabel("0,00");
-		total.setFont(new Font("Sans serif",Font.PLAIN,80));
+		TOTAL = new JLabel("0,00");
+		TOTAL.setFont(new Font("Sans serif",Font.PLAIN,80));
 		dim = new Dimension(250,90);
-		total.setMaximumSize(dim);
-		total.setPreferredSize(dim);
-		total.setHorizontalAlignment(SwingConstants.CENTER);
+		TOTAL.setMaximumSize(dim);
+		TOTAL.setPreferredSize(dim);
+		TOTAL.setHorizontalAlignment(SwingConstants.CENTER);
 		JPanel totalP = new JPanel();
 		totalP.setLayout(new BoxLayout(totalP,BoxLayout.LINE_AXIS));
-		totalP.add(total);
+		totalP.add(TOTAL);
 		
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
-		other.add(this.whereTo);
+		other.add(WHERE_TO);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
 		other.add(scroll);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
 		other.add(totalP);
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
 
-		this.free = new JCheckBox("Gratis");
+		free = new JCheckBox("Gratis");
 		JPanel freeAndAddons = new JPanel();
 		freeAndAddons.setLayout(new BoxLayout(freeAndAddons, BoxLayout.LINE_AXIS));
 		JPanel salse = new JPanel();
@@ -218,7 +209,7 @@ public class CashDeskFrame extends JInternalFrame {
 		ketchup.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 
@@ -233,7 +224,7 @@ public class CashDeskFrame extends JInternalFrame {
 		mayonnaise.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 
@@ -248,7 +239,7 @@ public class CashDeskFrame extends JInternalFrame {
 		hot.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 		JButton addRemove = new JButton("Variaz.");
@@ -262,7 +253,7 @@ public class CashDeskFrame extends JInternalFrame {
 		addRemove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 		JButton pink = new JButton("S.Rosa");
@@ -276,11 +267,11 @@ public class CashDeskFrame extends JInternalFrame {
 		pink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 
-		freeAndAddons.add(this.free);
+		freeAndAddons.add(free);
 		freeAndAddons.add(Box.createRigidArea(new Dimension(10, 0)));
 		freeAndAddons.add(addRemove);
 		freeAndAddons.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -308,7 +299,7 @@ public class CashDeskFrame extends JInternalFrame {
 		confirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 
@@ -323,7 +314,7 @@ public class CashDeskFrame extends JInternalFrame {
 		undo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 
@@ -338,7 +329,7 @@ public class CashDeskFrame extends JInternalFrame {
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				CashDeskFrame.this.convertButtonActionPerformed(evt);
+				CashDeskFrame.convertButtonActionPerformed(evt);
 			}
 		});
 
@@ -353,87 +344,87 @@ public class CashDeskFrame extends JInternalFrame {
 		other.add(buttons);
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
 		other.add(Box.createVerticalGlue());
-		this.add(other);
-		this.add(Box.createRigidArea(new Dimension(10, 0)));
-		this.add(Box.createHorizontalGlue());
-		this.pack();
+		add(other);
+		add(Box.createRigidArea(new Dimension(10, 0)));
+		add(Box.createHorizontalGlue());
+		pack();
 
 		Database.disconnect();
 
 	}
 
-	private void paintHeader() {
+	private static void paintHeader() {
 		try {
-			//this.doc.setParagraphAttributes(0, this.doc.getLength(), this.doc.getStyle("blue"), false);
-			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("center"));
-			this.doc.insertString(this.doc.getLength(), "FESTA CON NOI 2012\n", this.doc.getStyle("regular"));
-			this.doc.insertString(this.doc.getLength(), "Paninoteca Aladino\n", this.doc.getStyle("aladino"));
+			//DOC.setParagraphAttributes(0, DOC.getLength(), DOC.getStyle("blue"), false);
+			DOC.setLogicalStyle(DOC.getLength(), DOC.getStyle("center"));
+			DOC.insertString(DOC.getLength(), "FESTA CON NOI 2012\n", DOC.getStyle("regular"));
+			DOC.insertString(DOC.getLength(), "Paninoteca Aladino\n", DOC.getStyle("aladino"));
 		} catch (BadLocationException e) {
 
 		}
 	}
 
-	private void paintBody() {
+	private static void paintBody() {
 		try {
-			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("left"));
+			DOC.setLogicalStyle(DOC.getLength(), DOC.getStyle("left"));
 
-			String order = this.core.getActualOrder();
+			String order = CashDesk.getActualOrder();
 
-			ArrayList<String> val = this.core.getBarProd();
+			ArrayList<String> val = CashDesk.getBarProd();
 			if (val.size() > 0) {
-				this.doc.insertString(this.doc.getLength(), "\nORDINE BIBITE - N. " + order, this.doc.getStyle("regular"));
-				this.doc.insertString(this.doc.getLength(), "\n\t" + this.whereTo.getSelectedItem() + "\n\n", this.doc.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\nORDINE BIBITE - N. " + order, DOC.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\n\t" + WHERE_TO.getSelectedItem() + "\n\n", DOC.getStyle("regular"));
 				for (int i = 0; i < val.size(); i++) {
-					this.doc.insertString(this.doc.getLength(), "- " + val.get(i) + "\n", this.doc.getStyle("regular"));
+					DOC.insertString(DOC.getLength(), "- " + val.get(i) + "\n", DOC.getStyle("regular"));
 				}
 			}
-			val = this.core.getKitchenProd();
+			val = CashDesk.getKitchenProd();
 			if (val.size() > 0) {
-				this.doc.insertString(this.doc.getLength(), "\n------------------------------", this.doc.getStyle("regular"));
-				this.doc.insertString(this.doc.getLength(), "\nORDINE CUCINA - N. " + order, this.doc.getStyle("regular"));
-				this.doc.insertString(this.doc.getLength(), "\n\t" + this.whereTo.getSelectedItem() + "\n\n", this.doc.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\n------------------------------", DOC.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\nORDINE CUCINA - N. " + order, DOC.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\n\t" + WHERE_TO.getSelectedItem() + "\n\n", DOC.getStyle("regular"));
 				for (int i = 0; i < val.size(); i++) {
-					this.doc.insertString(this.doc.getLength(), "- " + val.get(i) + "\n", this.doc.getStyle("regular"));
+					DOC.insertString(DOC.getLength(), "- " + val.get(i) + "\n", DOC.getStyle("regular"));
 				}
 			}
-			val = this.core.getFriedProd();
+			val = CashDesk.getFriedProd();
 			if (val.size() > 0) {
-				this.doc.insertString(this.doc.getLength(), "\n------------------------------", this.doc.getStyle("regular"));
-				this.doc.insertString(this.doc.getLength(), "\nORDINE FRITTO e DOLCI - N. " + order, this.doc.getStyle("regular"));
-				this.doc.insertString(this.doc.getLength(), "\n\t" + this.whereTo.getSelectedItem() + "\n\n", this.doc.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\n------------------------------", DOC.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\nORDINE FRITTO e DOLCI - N. " + order, DOC.getStyle("regular"));
+				DOC.insertString(DOC.getLength(), "\n\t" + WHERE_TO.getSelectedItem() + "\n\n", DOC.getStyle("regular"));
 				for (int i = 0; i < val.size(); i++) {
-					this.doc.insertString(this.doc.getLength(), "- " + val.get(i) + "\n", this.doc.getStyle("regular"));
+					DOC.insertString(DOC.getLength(), "- " + val.get(i) + "\n", DOC.getStyle("regular"));
 				}
 			}
-			this.doc.insertString(this.doc.getLength(), "\n\n", this.doc.getStyle("regular"));
+			DOC.insertString(DOC.getLength(), "\n\n", DOC.getStyle("regular"));
 		} catch (BadLocationException e) {
 
 		}
 	}
 
-	public void paintFooter() {
+	public static void paintFooter() {
 		try {
-			Double total = this.core.getTotal() / 100.;
-			this.doc.insertString(this.doc.getLength(), "Totale: " + total + "0 E\n\n", this.doc.getStyle("regular"));
+			Double total = CashDesk.getTotal() / 100.;
+			DOC.insertString(DOC.getLength(), "Totale: " + total + "0 E\n\n", DOC.getStyle("regular"));
 			Date todaysDate = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 			String formattedDate = formatter.format(todaysDate);
-			String order = this.core.getActualOrder();
+			String order = CashDesk.getActualOrder();
 
-			this.doc.setLogicalStyle(this.doc.getLength(), this.doc.getStyle("center"));
-			this.doc.insertString(this.doc.getLength(), "ARRIVEDERCI E GRAZIE\n", this.doc.getStyle("small"));
-			this.doc.insertString(this.doc.getLength(), " \n", this.doc.getStyle("icon"));
-			this.doc.insertString(this.doc.getLength(), formattedDate + " - N: " + order + "\n", this.doc.getStyle("small"));
+			DOC.setLogicalStyle(DOC.getLength(), DOC.getStyle("center"));
+			DOC.insertString(DOC.getLength(), "ARRIVEDERCI E GRAZIE\n", DOC.getStyle("small"));
+			DOC.insertString(DOC.getLength(), " \n", DOC.getStyle("icon"));
+			DOC.insertString(DOC.getLength(), formattedDate + " - N: " + order + "\n", DOC.getStyle("small"));
 
-			this.doc.insertString(this.doc.getLength(), "-NON FISCALE-\n", this.doc.getStyle("small"));
+			DOC.insertString(DOC.getLength(), "-NON FISCALE-\n", DOC.getStyle("small"));
 		} catch (BadLocationException e) {
 
 		}
 	}
 
-	private void clearText() {
+	private static void clearText() {
 		try {
-			this.doc.remove(0, this.doc.getLength());
+			DOC.remove(0, DOC.getLength());
 		} catch (BadLocationException e) {
 			// ###### DEBUG ######
 			Console.println("[CashDeskFrame] Error during clearing the texts");
@@ -441,7 +432,7 @@ public class CashDeskFrame extends JInternalFrame {
 		}
 	}
 
-	public void print() {
+	public static void print() {
 		boolean background = false;// backgroundCheck.isSelected();
 
 		// PrintingTask task = new PrintingTask(header, footer, interactive);
@@ -453,79 +444,42 @@ public class CashDeskFrame extends JInternalFrame {
 		}
 	}// GEN-LAST:event_print
 
-	private class PrintingTask extends SwingWorker<Object, Object> {
-		private final MessageFormat	headerFormat;
-		private final MessageFormat	footerFormat;
-		private final boolean		interactive;
-		private volatile boolean	complete	= false;
-		private volatile String		message;
-
-		public PrintingTask(MessageFormat header, MessageFormat footer, boolean interactive) {
-			this.headerFormat = header;
-			this.footerFormat = footer;
-			this.interactive = interactive;
-		}
-
-		@Override
-		protected Object doInBackground() {
-			try {
-				PrintService[] ps = PrinterJob.lookupPrintServices();
-				for (int i = 0; i < ps.length; i++) {
-					if (ps[i].getName().equals(GUI.getDeskPrinter())) {
-						PrintRequestAttributeSet attr_set = new HashPrintRequestAttributeSet();
-						attr_set.add(new MediaPrintableArea(5, 5, 90, 200, MediaPrintableArea.MM));
-						CashDeskFrame.this.textPane.print(this.headerFormat, this.footerFormat, false, ps[i], attr_set, this.interactive);
-					}
-				}
-				for (int i = 0; i < ps.length; i++) {
-					if (ps[i].getName().equals(GUI.getKitchenPrinter())) {
-						CashDeskFrame.this.onlyBody();
-						PrintRequestAttributeSet attr_set = new HashPrintRequestAttributeSet();
-						attr_set.add(new MediaPrintableArea(5, 5, 90, 200, MediaPrintableArea.MM));
-						CashDeskFrame.this.textPane.print(this.headerFormat, this.footerFormat, false, ps[i], attr_set, this.interactive);
-					}
-				}
-			} catch (PrinterException ex) {
-				this.message = "Sorry, a printer error occurred";
-			} catch (SecurityException ex) {
-				this.message = "Sorry, cannot access the printer due to security reasons";
-			}
-			return null;
-		}
+	public static JTextPane getTextPane(){
+		return textPane;
 	}
 
-	protected void addStylesToDocument(StyledDocument doc) {
+	protected static void addStylesToDocument(StyledDocument doc) {
 		// Initialize some styles.
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
-		Style regular = doc.addStyle("regular", def);
+		Style regular = DOC.addStyle("regular", def);
 		StyleConstants.setFontFamily(def, "SansSerif");
 
-		Style s = doc.addStyle("italic", regular);
+		Style s = DOC.addStyle("italic", regular);
 		StyleConstants.setItalic(s, true);
 
-		s = doc.addStyle("bold", regular);
+		s = DOC.addStyle("bold", regular);
 		StyleConstants.setBold(s, true);
 
-		s = doc.addStyle("small", regular);
+		s = DOC.addStyle("small", regular);
 		StyleConstants.setFontSize(s, 10);
 
-		s = doc.addStyle("large", regular);
+		s = DOC.addStyle("large", regular);
 		StyleConstants.setFontSize(s, 14);
 
-		s = doc.addStyle("blue", regular);
+		s = DOC.addStyle("blue", regular);
 		StyleConstants.setForeground(s, Color.BLUE);
 
-		s = doc.addStyle("right", regular);
+		s = DOC.addStyle("right", regular);
 		StyleConstants.setAlignment(s, StyleConstants.ALIGN_RIGHT);
 
-		// s = doc.addStyle("left", regular);
+		// s = DOC.addStyle("left", regular);
 		// StyleConstants.setAlignment(s, StyleConstants.ALIGN_LEFT);
 
-		s = doc.addStyle("center", regular);
+		s = DOC.addStyle("center", regular);
 		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
 
-		s = doc.addStyle("aladino", regular);
+		s = DOC.addStyle("aladino", regular);
 		try {
 			Font.createFont(Font.TRUETYPE_FONT, new File("res/aladdin.ttf"));
 		} catch (FontFormatException e) {
@@ -538,7 +492,7 @@ public class CashDeskFrame extends JInternalFrame {
 		StyleConstants.setFontFamily(s, "Aladdin");
 		StyleConstants.setFontSize(s, 25);
 
-		s = doc.addStyle("icon", regular);
+		s = DOC.addStyle("icon", regular);
 		StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
 		ImageIcon logoIcon = new ImageIcon("images/logo2.gif", "Logo");
 		if (logoIcon != null) {
@@ -546,41 +500,41 @@ public class CashDeskFrame extends JInternalFrame {
 		}
 	}
 
-	public void onlyBody() {
-		this.clearText();
-		if (this.core.getProds() != null && this.core.getProds().size() != 0) {
-			this.paintBody();
+	public static void onlyBody() {
+		clearText();
+		if (CashDesk.getProds() != null && CashDesk.getProds().size() != 0) {
+			paintBody();
 		}
 
 	}
 
-	protected void convertButtonActionPerformed(ActionEvent evt) {
+	protected static void convertButtonActionPerformed(ActionEvent evt) {
 		JButton b = (JButton) evt.getSource();
-		this.core.buttonEvent(b.getText(), this.free.isSelected());
+		CashDesk.buttonEvent(b.getText(), free.isSelected());
 	}
 
-	protected void whereTo(ActionEvent evt) {
-		this.core.setWhereTo(this.whereTo.getSelectedIndex());
-		this.repaintText();
+	protected static void whereTo(ActionEvent evt) {
+		CashDesk.setWhereTo(WHERE_TO.getSelectedIndex());
+		repaintText();
 	}
 
-	public void resetWhereTo() {
-		this.whereTo.setSelectedIndex(0);
+	public static void resetWhereTo() {
+		WHERE_TO.setSelectedIndex(0);
 	}
 	
-	public void paintTotal(){
-		total.setText((this.core.getTotal() / 100.+"0").replace('.', ','));
+	public static void paintTotal(){
+		TOTAL.setText((CashDesk.getTotal() / 100.+"0").replace('.', ','));
 	}
 
-	public void repaintText() {
-		this.clearText();
-		if (this.core.getProds() != null && this.core.getProds().size() != 0) {
-			this.paintTotal();
-			this.paintHeader();
-			this.paintBody();
-			this.paintFooter();
+	public static void repaintText() {
+		clearText();
+		if (CashDesk.getProds() != null && CashDesk.getProds().size() != 0) {
+			paintTotal();
+			paintHeader();
+			paintBody();
+			paintFooter();
 		}else{
-			this.total.setText("0,00");
+			TOTAL.setText("0,00");
 		}
 	}
 
