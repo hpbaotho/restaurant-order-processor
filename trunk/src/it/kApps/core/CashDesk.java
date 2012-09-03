@@ -85,7 +85,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("1") || p.getCat().equals("2")) {
-				list.add(p.getCompleteName() + p.getAdds()+ p.getVariations());
+				list.add(p.getName() + p.getAdds()+ p.getVariations());
 			}
 		}
 		return list;
@@ -102,7 +102,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("0") || p.getCat().equals("3")) {
-				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves()+ p.getVariations());
+				list.add(p.getName() + p.getAdds() + p.getRemoves()+ p.getVariations());
 			}
 		}
 		return list;
@@ -119,7 +119,7 @@ public class CashDesk {
 		for (int i = 0; i < this.prods.size(); i++) {
 			Product p = this.prods.get(i);
 			if (p.getCat().equals("4") || p.getCat().equals("5")) {
-				list.add(p.getCompleteName() + p.getAdds() + p.getRemoves()+ p.getVariations());
+				list.add(p.getName() + p.getAdds() + p.getRemoves()+ p.getVariations());
 			}
 		}
 		return list;
@@ -221,7 +221,8 @@ public class CashDesk {
 			Product p = new Product(text, free);
 			String ing = JOptionPane.showInputDialog("Inserisci gli ingredienti");
 			if(ing!=null && !"".equals(ing)){
-				p.setAdds(ing,Integer.parseInt(ing));
+				String[] add = ing.split(",");
+				p.setAdds(ing,add.length);
 				this.prods.add(p);
 				if (!free) {
 					this.updateTotal(p.getPrice(), "+");
@@ -256,7 +257,7 @@ public class CashDesk {
 					this.prods.get(this.prods.size() - 1).setRemoves(remove.getText());
 				}
 				if (!"".equals(variation.getText())) {
-					this.prods.get(this.prods.size() - 1).setVariations(remove.getText());
+					this.prods.get(this.prods.size() - 1).setVariations(variation.getText());
 				}
 			}
 		} else {

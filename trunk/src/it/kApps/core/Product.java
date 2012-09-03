@@ -46,7 +46,10 @@ public class Product {
 	}
 
 	public void setAdds(String ing, int a) {
-		this.adds.add(ing);
+		String[] addArr = ing.split(",");
+		for(int i = 0; i< addArr.length; i++){
+			this.adds.add(addArr[i]);			
+		}
 		for (int i = 0; i < a; i++) {
 			this.addfee.add(ing);
 		}
@@ -63,7 +66,7 @@ public class Product {
 	public String getAdds() {
 		String s = "";
 		for (int i = 0; i < this.adds.size(); i++) {
-			s += "\n AGGIUNGI: " + this.adds.get(i);
+			s += "\n\tAGGIUNGI: " + this.adds.get(i);
 		}
 		return s;
 	}
@@ -71,7 +74,7 @@ public class Product {
 	public String getRemoves() {
 		String s = "";
 		for (int i = 0; i < this.removes.size(); i++) {
-			s += "\n TOGLI: " + this.removes.get(i);
+			s += "\n\tTOGLI: " + this.removes.get(i);
 		}
 		return s;
 	}
@@ -90,10 +93,6 @@ public class Product {
 
 	public String getCat() {
 		return this.cat;
-	}
-
-	public String getCompleteName() {
-		return this.name;
 	}
 
 	public int getPrice() {
