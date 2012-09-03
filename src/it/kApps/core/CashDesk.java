@@ -207,8 +207,7 @@ public class CashDesk {
 			Product p = new Product(text, free);
 			String ing = JOptionPane.showInputDialog("Inserisci gli ingredienti");
 			if (ing != null && !"".equals(ing)) {
-				String[] add = ing.split(",");
-				p.setAdds(ing, add.length);
+				p.setAdds(ing, 0);
 				PRODS.add(p);
 				if (!free) {
 					updateTotal(p.getPrice(), "+");

@@ -37,7 +37,10 @@ public class Database {
 	 * The name of the database
 	 */
 	private static String		dbName;
-
+	
+	/**
+	 * Class' name used in <code>Console</code> messages.
+	 */
 	private static final String	CN	= "[Database] ";
 	/**
 	 * Constructor.<br>
@@ -52,7 +55,7 @@ public class Database {
 	public Database(String databaseName, String fileName) {
 		hsqlServer = null;
 		connection = null;
-
+		
 		dbName = databaseName;
 
 		// ###### DEBUG ######
@@ -147,17 +150,7 @@ public class Database {
 		}
 	}
 
-	// ############################################################
-	public static boolean okcancel(String theMessage) {
-		int result = JOptionPane.showConfirmDialog((Component) null, theMessage, "alert", JOptionPane.OK_CANCEL_OPTION);
-		if (result == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	// ############################################################
+	
 
 	/**
 	 * Create the basic structure of the database if necessary.<br>
@@ -185,12 +178,12 @@ public class Database {
 			// ###### DEBUG ######
 			Console.println(CN + "Creating table 'categories'");
 			// ###################
-			Database.connection.prepareStatement("CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20));").execute();
+			Database.connection.prepareStatement("CREATE TABLE categories (id INTEGER IDENTITY, name VARCHAR(20), color VARCHAR(20));").execute();
 
 			// ###### DEBUG ######
 			Console.println(CN + "Creating table 'products'");
 			// ###################
-			Database.connection.prepareStatement("CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50), price INTEGER);")
+			Database.connection.prepareStatement("CREATE TABLE products (id INTEGER IDENTITY, name VARCHAR(30) UNIQUE, cat INTEGER, ingr VARCHAR(50), price INTEGER, calledToday INTEGER, calledEver INTEGER);")
 			.execute();
 
 			// ###### DEBUG ######
@@ -241,7 +234,9 @@ public class Database {
 			System.err.println("Error: " + e.getMessage());
 		}
 	}
-
+	
+	
+	
 	public static ArrayList<String> listTableColumns(String table) {
 		try{
 			// ###### DEBUG ######
@@ -266,7 +261,7 @@ public class Database {
 		}
 	}
 
-	public static ArrayList<String> listTableValues(String table) {
+	public static ArrayList<String> listNamesFromTable(String table) {
 		try {
 			// ###### DEBUG ######
 			Console.println(CN + "Asking to the database the values list for " + table.toUpperCase());
@@ -386,7 +381,7 @@ public class Database {
 		// hsqlServer.stop();
 		// }
 		// }
-		Database d = new Database("xdb", "testdb");
+		new Database("xdb", "testdb");
 		Database.start();
 		Database.connect();
 		Database.tableStructureCreation();
@@ -397,4 +392,15 @@ public class Database {
 		// d.doSomething();
 		Database.stop();
 	}
+
+	// ############################################################
+	public static boolean okcancel(String theMessage) {
+		int result = JOptionPane.showConfirmDialog((Component) null, theMessage, "alert", JOptionPane.OK_CANCEL_OPTION);
+		if (result == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	// ############################################################
 }
