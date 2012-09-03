@@ -1,53 +1,53 @@
-Allegria!0!0!450
-Amicizia!0!0!500
-Amore!0!0!500
-Beona!0!0!500
-Boscaiola!0!0!500
-Dialogo!0!0!500
-Ecologico!0!0!500
-Pagoda!0!0!500
-Proximus!0!0!500
-Sardon!0!0!500
-Solidarieta!0!0!500
-Sorriso!0!0!500
-Bionda Piccola!1!0!200
-Bionda Media!1!0!300
-Rossa Piccola!1!0!270
-Rossa Media!1!1!370
-Birra Speciale!1!0!400
-Acqua Naturale!1!0!100
-Acqua Frizzante!1!0!100
-The Pesca!1!0!200
-The Limone!1!0!200
-Coca Cola!1!0!200
-Fanta!1!0!200
-Raboso Bicc.!2!0!100
-Raboso 1/2l!2!0!350
-Raboso 1l!2!0!600
-Prosecco Bicc.!2!0!100
-Prosecco 1/2l!2!0!350
-Prosecco 1l!2!0!600
-Prosecco Bott!2!0!800
-Pinot Rosa!2!0!550
-Bruschetta!3!0!150
-Toast!3!0!150
-Toast Farcito!3!0!200
-Sfogliata 1!3!0!500
-Sfogliata 2!3!0!500
-Sfogliata Fantasia!3!0!500
-Pizzetta!3!0!200
-Panino Cotto!3!0!300
-Panino Crudo!3!0!300
-Panino Salame!3!0!300
-Panino Speck!3!0!300
-Crepes cotto!3!0!350
-Crepes crudo!3!0!400
-Crepes formaggio!3!0!400
-Crepes cotto/form!3!0!400
-Patatine Fritte!4!0!200
-Mozz.Carr. PROSC!4!0!150
-Mozz.Carr. ACCIUG!4!0!150
-Tiramisu!5!0!250
-Zuppa Inglese!5!0!250
-Crepes Nutella!5!0!400
-Crepes Marmellata!5!0!400
+Allegria!0!0!450!0!0
+Amicizia!0!0!500!0!0
+Amore!0!0!500!0!0
+Beona!0!0!500!0!0
+Boscaiola!0!0!500!0!0
+Dialogo!0!0!500!0!0
+Ecologico!0!0!500!0!0
+Pagoda!0!0!500!0!0
+Proximus!0!0!500!0!0
+Sardon!0!0!500!0!0
+Solidarieta!0!0!500!0!0
+Sorriso!0!0!500!0!0
+Bionda Piccola!1!0!200!0!0
+Bionda Media!1!0!300!0!0
+Rossa Piccola!1!0!270!0!0
+Rossa Media!1!1!370!0!0
+Birra Speciale!1!0!400!0!0
+Acqua Naturale!1!0!100!0!0
+Acqua Frizzante!1!0!100!0!0
+The Pesca!1!0!200!0!0
+The Limone!1!0!200!0!0
+Coca Cola!1!0!200!0!0
+Fanta!1!0!200!0!0
+Raboso Bicc.!2!0!100!0!0
+Raboso 1/2l!2!0!350!0!0
+Raboso 1l!2!0!600!0!0
+Prosecco Bicc.!2!0!100!0!0
+Prosecco 1/2l!2!0!350!0!0
+Prosecco 1l!2!0!600!0!0
+Prosecco Bott!2!0!800!0!0
+Pinot Rosa!2!0!550!0!0
+Bruschetta!3!0!150!0!0
+Toast!3!0!150!0!0
+Toast Farcito!3!0!200!0!0
+Sfogliata 1!3!0!500!0!0
+Sfogliata 2!3!0!500!0!0
+Sfogliata Fantasia!3!0!500!0!0
+Pizzetta!3!0!200!0!0
+Panino Cotto!3!0!300!0!0
+Panino Crudo!3!0!300!0!0
+Panino Salame!3!0!300!0!0
+Panino Speck!3!0!300!0!0
+Crepes cotto!3!0!350!0!0
+Crepes crudo!3!0!400!0!0
+Crepes formaggio!3!0!400!0!0
+Crepes cotto/form!3!0!400!0!0
+Patatine Fritte!4!0!200!0!0
+Mozz.Carr. PROSC!4!0!150!0!0
+Mozz.Carr. ACCIUG!4!0!150!0!0
+Tiramisu!5!0!250!0!0
+Zuppa Inglese!5!0!250!0!0
+Crepes Nutella!5!0!400!0!0
+Crepes Marmellata!5!0!400!0!0

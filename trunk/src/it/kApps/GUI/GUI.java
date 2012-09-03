@@ -390,7 +390,7 @@ public class GUI {
 				Console.println("[CashDesk] Error in handling database values");
 				// ###################
 			}
-			JOptionPane.showMessageDialog(null, "Il totale di oggi �: " + (actual / 100.) + "0 Euro");
+			JOptionPane.showMessageDialog(null, "Il totale di oggi e': " + (actual / 100.) + "0 Euro");
 			Database.disconnect();
 		}
 		if ("Total Ever".equals(action)) {
@@ -482,6 +482,46 @@ public class GUI {
 					// ###################
 				}
 				ever -= Integer.parseInt(result) * 100;
+				updated = Database.updateTable("settings", "totalEver", "" + ever);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL OF THE DAY. " + Integer.parseInt(result) * 100 + " euro");
+				}
+				Database.disconnect();
+			}
+		}
+		if ("Another item".equals(action)) {
+			String result = JOptionPane.showInputDialog((Component) null, "Sicuro? Tutto viene resettato!", "alert", JOptionPane.OK_CANCEL_OPTION);
+			if (result != "") {
+				Database.connect();
+				ResultSet rs = Database.listValuesByName("totalToday", "settings");
+				int actual = 0;
+				try {
+					while (rs.next()) {
+						actual = rs.getInt(3);
+					}
+				} catch (SQLException ex) {
+					// ###### DEBUG ######
+					Console.println("[CashDesk] Error in handling database values");
+					// ###################
+				}
+				actual += Integer.parseInt(result) * 100;
+				Boolean updated = Database.updateTable("settings", "totalToday", "" + actual);
+				if (!updated) {
+					Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL. " + Integer.parseInt(result) * 100 + " euro");
+				}
+
+				rs = Database.listValuesByName("totalEver", "settings");
+				int ever = 0;
+				try {
+					while (rs.next()) {
+						ever = rs.getInt(3);
+					}
+				} catch (SQLException ex) {
+					// ###### DEBUG ######
+					Console.println("[CashDesk] Error in handling database values");
+					// ###################
+				}
+				ever += Integer.parseInt(result) * 100;
 				updated = Database.updateTable("settings", "totalEver", "" + ever);
 				if (!updated) {
 					Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL OF THE DAY. " + Integer.parseInt(result) * 100 + " euro");

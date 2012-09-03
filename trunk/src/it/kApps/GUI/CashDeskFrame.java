@@ -69,7 +69,7 @@ public class CashDeskFrame extends JInternalFrame {
 		Database.start();
 		Database.connect();
 
-		ArrayList<String> cat = Database.listTableValues("categories");
+		ArrayList<String> cat = Database.listNamesFromTable("categories");
 
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.LINE_AXIS));
 		add(Box.createRigidArea(new Dimension(10, 0)));
@@ -81,7 +81,7 @@ public class CashDeskFrame extends JInternalFrame {
 			add(p);
 			p.add(Box.createRigidArea(new Dimension(0, 5)));
 
-			ArrayList<String> bts = Database.listTableValues("products WHERE CAT=" + i);
+			ArrayList<String> bts = Database.listNamesFromTable("products WHERE CAT=" + i);
 			JLabel lbl = new JLabel(cat.get(i));
 			p.add(lbl);
 			lbl.setFont(new Font("Broadway", Font.BOLD, 24));
@@ -106,7 +106,7 @@ public class CashDeskFrame extends JInternalFrame {
 			}
 			p.add(Box.createRigidArea(new Dimension(0, 5)));
 			if (bts.size() < 12) {
-				ArrayList<String> bts2 = Database.listTableValues("products WHERE CAT=" + (i + 1));
+				ArrayList<String> bts2 = Database.listNamesFromTable("products WHERE CAT=" + (i + 1));
 				if (bts2.size() + bts.size() < 12) {
 					i++;
 					p.add(Box.createRigidArea(new Dimension(0, 20)));
