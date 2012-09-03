@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 import java.util.Hashtable;
 
 import javax.print.PrintService;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -60,7 +62,7 @@ public class GUI {
 	/**
 	 * The console
 	 */
-	private JTextArea									output;
+	private static JTextArea							output;
 	/**
 	 * the scroll pane in the console frame.
 	 */
@@ -83,9 +85,9 @@ public class GUI {
 	 */
 	public GUI(String title) {
 
-		// ########DEBUG
+		// ###### DEBUG ######
 		Console.println("[GUI] Creating a new Frame");
-		// #############
+		// ###################
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -103,9 +105,9 @@ public class GUI {
 		// mainFrame.setLocationRelativeTo(null); //USED TO CENTER
 		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
 
-		// ########DEBUG
+		// ###### DEBUG ######
 		Console.println("[GUI] Creating the desktop content pane");
-		// #############
+		// ###################
 
 		this.desktop = new JDesktopPane();
 		mainFrame.setContentPane(this.desktop);
@@ -113,11 +115,12 @@ public class GUI {
 
 		// Default starts the CashDesk unit
 		this.createCashDeskPane();
+		this.createConsolePane(false);
 		this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 
-		// ########DEBUG
+		// ###### DEBUG ######
 		Console.println("[GUI] Creating and setting the menu");
-		// #############
+		// ###################
 		Menu menu = new Menu(this);
 		mainFrame.setJMenuBar(menu.createMenuBar());
 
@@ -126,34 +129,34 @@ public class GUI {
 
 	/**
 	 * Used to create the <code>InternalFrame</code> of the <code>Console</code> class.
+	 * @param vis 
 	 * 
 	 * @return the container
 	 */
-	public Container createConsolePane() {
+	public Container createConsolePane(boolean vis) {
 
 		if (GUI.intFrames.containsKey("Console")) {
 			intFrames.get("Console").setVisible(true);
 			return null;
 		}
 		JInternalFrame intFrame = new JInternalFrame("Console", true, true, true, true);
-		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove
-		// shadows
-		intFrame.setBounds(1050, 0, 1024, 768); // min size
+		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove shadow
+		intFrame.setBounds(850, 0, 400, 200); // min size
 		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.desktop.add(intFrame);
 
 		// Create a scrolled text area.
-		this.output = new JTextArea(8, 70);
-		this.output.setFont(new Font("monospaced", Font.PLAIN, 10));
-		this.output.setEditable(false);
-		this.output.setLineWrap(true);
-		this.output.setWrapStyleWord(false);
-		this.scrollPane = new JScrollPane(this.output);
+		output = new JTextArea();
+		output.setFont(new Font("monospaced", Font.PLAIN, 10));
+		output.setEditable(false);
+		output.setLineWrap(true);
+		output.setWrapStyleWord(false);
+		output.setBorder(BorderFactory.createEtchedBorder());
+		this.scrollPane = new JScrollPane(output);
 
 		// Add the text area to the content pane.
 		intFrame.add(this.scrollPane);
-		// intFrame.pack();
-		intFrame.setVisible(true);
+		intFrame.setVisible(vis);
 		intFrames.put("Console", intFrame);
 
 		return this.desktop;
@@ -164,15 +167,15 @@ public class GUI {
 	 * 
 	 * @param msg
 	 */
-	public void writeInConsole(String msg) {
-		if (this.output == null) {
+	public static void writeInConsole(String msg) {
+		if (output == null) {
 			// ###### DEBUG ######
 			Console.println("[GUI] Error, tried to write in the console, but it is not ready yet.");
 			// ###################
 			return;
 		}
-		this.output.append(msg);
-		this.output.setCaretPosition(this.output.getDocument().getLength());
+		output.append(msg);
+		output.setCaretPosition(output.getDocument().getLength());
 	}
 
 	/**
@@ -180,9 +183,16 @@ public class GUI {
 	 * 
 	 * @return the width
 	 */
-	public int getConsoleWidth(){
-		this.output.repaint();
-		return this.output.getColumns();
+	public static int getConsoleWidth() {
+		output.repaint();
+
+		FontMetrics fontMetrics = output.getGraphics().getFontMetrics();
+		final int charWidth = fontMetrics.charWidth('M');
+		final int prefWidth = output.getPreferredSize().width;
+
+		int maxChars = prefWidth / charWidth;
+
+		return maxChars;
 	}
 
 	/**
@@ -192,12 +202,12 @@ public class GUI {
 	 */
 	public Container createPrinterPane() {
 
-		if(GUI.intFrames.containsKey("Printers")){
+		if (GUI.intFrames.containsKey("Printers")) {
 			intFrames.get("Printers").setVisible(true);
 			return null;
 		}
 		JInternalFrame intFrame = new JInternalFrame("Printers", true, true, true, true);
-		intFrame.setSize(100, 50); // min size
+		intFrame.setSize(300, 200); // min size
 		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.desktop.add(intFrame);
 
@@ -320,10 +330,9 @@ public class GUI {
 	 */
 	public Container createCashDeskPane() {
 
-		CashDesk cd = new CashDesk();
-		CashDeskFrame intFrame = new CashDeskFrame(cd);
+		new CashDesk();
+		CashDeskFrame intFrame = new CashDeskFrame();
 		this.desktop.add(intFrame);
-
 		intFrame.setVisible(true);
 		intFrames.put("CashDesk", intFrame);
 
@@ -337,7 +346,7 @@ public class GUI {
 	 * 
 	 * @return the hashtable.
 	 */
-	public Hashtable<String, JInternalFrame> getIntFrames() {
+	public static Hashtable<String, JInternalFrame> getIntFrames() {
 		return intFrames;
 	}
 
@@ -351,7 +360,7 @@ public class GUI {
 	public JInternalFrame getFrame(String name) {
 		if (intFrames.containsKey(name)) {
 			return intFrames.get(name);
-		}else{
+		} else {
 			return null;
 		}
 	}
@@ -419,8 +428,7 @@ public class GUI {
 			}
 		}
 		if ("Reset all".equals(action)) {
-			int result = JOptionPane.showConfirmDialog((Component) null, "Sicuro? Tutto viene resettato!", "alert",
-					JOptionPane.OK_CANCEL_OPTION);
+			int result = JOptionPane.showConfirmDialog((Component) null, "Sicuro? Tutto viene resettato!", "alert", JOptionPane.OK_CANCEL_OPTION);
 			if (result == 0) {
 				Database.connect();
 				int actual = 0;

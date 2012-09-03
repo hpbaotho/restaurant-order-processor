@@ -1,5 +1,7 @@
 package it.kApps.core;
 
+import javax.swing.JOptionPane;
+
 import it.kApps.GUI.GUI;
 
 public class Console {
@@ -8,14 +10,7 @@ public class Console {
 	 * Progressive number of version
 	 */
 	protected static final String	CONSOLE_VERSION	= "0.0.1";
-
-	private static final String		NEW_LINE_FEED	= "\n";
-
-	private static GUI				gui;
-
-	public Console(GUI g) {
-		gui = g;
-	}
+	
 
 	public static void print(Object msg) {
 		String text;
@@ -24,8 +19,8 @@ public class Console {
 		} else {
 			text = msg.toString();
 		}
-		if (gui != null && gui.getIntFrames().containsKey("Console")) {
-			gui.writeInConsole(text);
+		if (GUI.getIntFrames().containsKey("Console")) {
+			GUI.writeInConsole(text);
 		} else {
 			System.out.print(text);
 		}
@@ -38,25 +33,28 @@ public class Console {
 		} else {
 			text = msg.toString();
 		}
-		print(text + NEW_LINE_FEED);
+		print(text + PagodaConstants.NEW_LINE_FEED);
+	}
+	
+	public static void printWarning(Object msg){
+		String text = "WARNING! ";
+		if (msg instanceof String) {
+			text += (String) msg;
+		} else {
+			text += msg.toString();
+		}
+		JOptionPane.showMessageDialog(null, text,"WARNING",JOptionPane.WARNING_MESSAGE);
+		print(text + PagodaConstants.NEW_LINE_FEED);
 	}
 
 	public static String center(String msg){
 		String result = msg;
-		println(""+gui.getConsoleWidth());
+		println(""+GUI.getConsoleWidth());
 		println(""+msg.length());
-		int spaces = (gui.getConsoleWidth()-msg.length())/2;
+		int spaces = (GUI.getConsoleWidth()-msg.length())/2;
 		for(int s = 0; s<spaces; s++){
 			result = " "+ result;
 		}
 		return result;
 	}
-
-	public static void setGUI(GUI g) {
-		gui = g;
-	}
-	public static GUI getGUI(){
-		return gui;
-	}
-
 }

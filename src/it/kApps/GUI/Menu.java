@@ -218,7 +218,7 @@ public class Menu implements ActionListener, ItemListener {
 		JMenuItem source = (JMenuItem) (e.getSource());
 		if (source.getText().equalsIgnoreCase("console")) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				this.gui.createConsolePane();
+				this.gui.createConsolePane(false);
 				// this.gui.getIntFrames().get("Console").setVisible(true);
 			} else {
 				this.gui.getIntFrames().get("Console").setVisible(false);
