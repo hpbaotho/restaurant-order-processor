@@ -24,7 +24,7 @@ public class CashDesk {
 	/**
 	 * For each client, the total of the order
 	 */
-	private static int							TOTAL;
+	private static int					TOTAL;
 	/**
 	 * Contains the products of the order, reset every client.
 	 */
@@ -32,7 +32,7 @@ public class CashDesk {
 	/**
 	 * The place where the order should be delivered
 	 */
-	private static int							WHERE_TO	= -1;
+	private static int					WHERE_TO	= -1;
 
 	/**
 	 * Constructor, set to zero the total and initialize a new <code>ArrayList&lt;String&gt;</code> of the products.
@@ -71,7 +71,7 @@ public class CashDesk {
 		for (int i = 0; i < PRODS.size(); i++) {
 			Product p = PRODS.get(i);
 			if (p.getCat().equals("1") || p.getCat().equals("2")) {
-				list.add(p.getName() + p.getAdds()+ p.getVariations());
+				list.add(p.getName() + p.getAdds() + p.getVariations());
 			}
 		}
 		return list;
@@ -88,7 +88,7 @@ public class CashDesk {
 		for (int i = 0; i < PRODS.size(); i++) {
 			Product p = PRODS.get(i);
 			if (p.getCat().equals("0") || p.getCat().equals("3")) {
-				list.add(p.getName() + p.getAdds() + p.getRemoves()+ p.getVariations());
+				list.add(p.getName() + p.getAdds() + p.getRemoves() + p.getVariations());
 			}
 		}
 		return list;
@@ -105,7 +105,7 @@ public class CashDesk {
 		for (int i = 0; i < PRODS.size(); i++) {
 			Product p = PRODS.get(i);
 			if (p.getCat().equals("4") || p.getCat().equals("5")) {
-				list.add(p.getName() + p.getAdds() + p.getRemoves()+ p.getVariations());
+				list.add(p.getName() + p.getAdds() + p.getRemoves() + p.getVariations());
 			}
 		}
 		return list;
@@ -206,9 +206,9 @@ public class CashDesk {
 		} else if ("Sfogliata Fantasia".equals(text) || "Toast Farcito".equals(text)) {
 			Product p = new Product(text, free);
 			String ing = JOptionPane.showInputDialog("Inserisci gli ingredienti");
-			if(ing!=null && !"".equals(ing)){
+			if (ing != null && !"".equals(ing)) {
 				String[] add = ing.split(",");
-				p.setAdds(ing,add.length);
+				p.setAdds(ing, add.length);
 				PRODS.add(p);
 				if (!free) {
 					updateTotal(p.getPrice(), "+");
@@ -221,22 +221,23 @@ public class CashDesk {
 			JTextField variation = new JTextField();
 			JCheckBox cb = new JCheckBox("Aggiungi prezzo");
 			JTextField quanti = new JTextField();
-			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove, new JLabel("Annotazioni"), variation,cb,new JLabel("N. ingredienti"),quanti };
+			final JComponent[] inputs = new JComponent[] { new JLabel("Aggiungi"), add, new JLabel("Togli"), remove, new JLabel("Annotazioni"), variation, cb,
+					new JLabel("N. ingredienti"), quanti };
 			JOptionPane.showMessageDialog(null, inputs, "Aggiungi o togli ingrediente", JOptionPane.PLAIN_MESSAGE);
 			if (PRODS.size() > 0) {
 				if (!"".equals(add.getText())) {
-					Product p = PRODS.get(PRODS.size()-1);
-					if(cb.isSelected() && !"".equals(quanti.getText())){
+					Product p = PRODS.get(PRODS.size() - 1);
+					if (cb.isSelected() && !"".equals(quanti.getText())) {
 						int i = 0;
-						if("".equals(quanti.getText())){
+						if ("".equals(quanti.getText())) {
 							i = 1;
-						}else{
+						} else {
 							i = Integer.parseInt(quanti.getText());
 						}
-						p.setAdds(add.getText(),i);
-						updateTotal(50*i, "+");
-					}else{
-						p.setAdds(add.getText(),0);
+						p.setAdds(add.getText(), i);
+						updateTotal(50 * i, "+");
+					} else {
+						p.setAdds(add.getText(), 0);
 					}
 				}
 				if (!"".equals(remove.getText())) {
