@@ -56,7 +56,10 @@ public class Product {
 	}
 
 	public void setRemoves(String ing) {
-		this.removes.add(ing);
+		String[] addArr = ing.split(",");
+		for(int i = 0; i< addArr.length; i++){
+			this.removes.add(addArr[i]);			
+		}
 	}
 
 	public void setVariations(String ing) {
@@ -80,7 +83,7 @@ public class Product {
 	}
 
 	public String getVariations() {
-		String s = "";
+		String s = "   ";
 		for (int i = 0; i < this.variations.size(); i++) {
 			s += " " + this.variations.get(i);
 		}
