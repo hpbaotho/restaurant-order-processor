@@ -21,7 +21,7 @@ public class Pagoda {
 		// USE MAC MENUBAR
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-		new Console();
+		// new Console();
 		new Database("xdb", "testdb");
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
