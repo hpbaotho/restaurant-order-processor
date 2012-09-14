@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -96,7 +97,7 @@ public class GUI {
 			Console.println("[GUI] Impossible to set the crossPlatform Look and Feel");
 			// ###################
 		}
-
+		
 		mainFrame = new JFrame(title);
 		mainFrame.setUndecorated(false);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,7 +142,7 @@ public class GUI {
 		}
 		JInternalFrame intFrame = new JInternalFrame("Console", true, true, true, true);
 		intFrame.putClientProperty("JInternalFrame.frameType", "normal"); // remove shadow
-		intFrame.setBounds(850, 0, 400, 200); // min size
+		intFrame.setBounds(820, 0, 450, 250); // min size
 		intFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.desktop.add(intFrame);
 
@@ -153,6 +154,7 @@ public class GUI {
 		output.setWrapStyleWord(false);
 		output.setBorder(BorderFactory.createEtchedBorder());
 		this.scrollPane = new JScrollPane(output);
+		this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		// Add the text area to the content pane.
 		intFrame.add(this.scrollPane);
