@@ -20,7 +20,7 @@ import javax.swing.JTextField;
  * 
  */
 public class CashDesk {
-
+	
 	/**
 	 * For each client, the total of the order
 	 */
@@ -33,7 +33,7 @@ public class CashDesk {
 	 * The place where the order should be delivered
 	 */
 	private static int					WHERE_TO	= -1;
-
+	
 	/**
 	 * Constructor, set to zero the total and initialize a new <code>ArrayList&lt;String&gt;</code> of the products.
 	 */
@@ -41,7 +41,7 @@ public class CashDesk {
 		TOTAL = 0;
 		PRODS = new ArrayList<Product>();
 	}
-
+	
 	/**
 	 * Set the place where the order should be delivered.<br>
 	 * 
@@ -50,7 +50,7 @@ public class CashDesk {
 	public static void setWhereTo(int table) {
 		WHERE_TO = table;
 	}
-
+	
 	/**
 	 * Get Where to
 	 * 
@@ -59,7 +59,7 @@ public class CashDesk {
 	public static int getWHERE_TO() {
 		return WHERE_TO;
 	}
-
+	
 	/**
 	 * Returns an <code>ArrayList&lt;String&gt;</code> containing the names of the products' names that refers to the
 	 * bar.
@@ -76,7 +76,7 @@ public class CashDesk {
 		}
 		return list;
 	}
-
+	
 	/**
 	 * Returns an <code>ArrayList&lt;String&gt;</code> containing the names of the products' names that refers to the
 	 * kitchen.
@@ -93,7 +93,7 @@ public class CashDesk {
 		}
 		return list;
 	}
-
+	
 	/**
 	 * Returns an <code>ArrayList&lt;String&gt;</code> containing the names of the products' names that refers to the
 	 * back kitchen.
@@ -110,7 +110,7 @@ public class CashDesk {
 		}
 		return list;
 	}
-
+	
 	/**
 	 * The total of the current order
 	 * 
@@ -119,7 +119,7 @@ public class CashDesk {
 	public static int getTotal() {
 		return TOTAL;
 	}
-
+	
 	/**
 	 * Return the products selected in this order
 	 * 
@@ -128,7 +128,7 @@ public class CashDesk {
 	public static ArrayList<Product> getProds() {
 		return PRODS;
 	}
-
+	
 	/**
 	 * Update the local total (the total of this order)
 	 * 
@@ -149,7 +149,7 @@ public class CashDesk {
 		}
 		return TOTAL;
 	}
-
+	
 	/**
 	 * Prepare the class for a new order.<br>
 	 * Ask the update of the <code>totalEver</code> and the <code>totalToday</code> in the database, reset the GUI to
@@ -163,7 +163,7 @@ public class CashDesk {
 		WHERE_TO = -1;
 		CashDeskFrame.repaintText();
 	}
-
+	
 	/**
 	 * Handles the action of each button in the gui, referring to its text
 	 * 
@@ -194,7 +194,7 @@ public class CashDesk {
 			incrementOrderNum();
 			JOptionPane.showMessageDialog(null, "Ordine andato a buon fine");
 			newClient();
-
+			
 		} else if ("B".equals(text)) {
 			CashDeskFrame.setBanco();
 		} else if ("Ket".equals(text)) {
@@ -216,7 +216,7 @@ public class CashDesk {
 				}
 			}
 		} else if ("Variaz.".equals(text)) {
-
+			
 			JTextField add = new JTextField();
 			JTextField remove = new JTextField();
 			JTextField variation = new JTextField();
@@ -257,7 +257,7 @@ public class CashDesk {
 		}
 		CashDeskFrame.repaintText();
 	}
-
+	
 	/**
 	 * Increments the order num in the database
 	 */
@@ -281,7 +281,7 @@ public class CashDesk {
 		}
 		Database.disconnect();
 	}
-
+	
 	/**
 	 * Increments the total by the value in the database.
 	 * 
@@ -306,7 +306,7 @@ public class CashDesk {
 		if (!updated) {
 			Console.println("[CashDesk] WARNING: COULD NOT UPDATE THE TOTAL. " + value + " euro");
 		}
-
+		
 		rs = Database.listValuesByName("totalEver", "settings");
 		int ever = 0;
 		try {
@@ -325,7 +325,7 @@ public class CashDesk {
 		}
 		Database.disconnect();
 	}
-
+	
 	/**
 	 * Read from the database the actual number of the order
 	 * 

@@ -13,7 +13,7 @@ import it.kApps.GUI.GUI;
  * @author Gianmarco Laggia
  * 
  */
-public class Console {
+public class Console extends PagodaConstants {
 	
 	/**
 	 * Progressive number of version
