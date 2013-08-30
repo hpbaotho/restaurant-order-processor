@@ -1,6 +1,7 @@
 package it.kApps.core;
 
 import javax.swing.JOptionPane;
+import it.kApps.core.PagodaConstants;
 
 import it.kApps.GUI.GUI;
 
@@ -48,7 +49,7 @@ public class Console {
 		print(text + PagodaConstants.NEW_LINE_FEED);
 	}
 	
-	// FIXME deve essere testo grigio questo!! IL COLORE è importante
+	// FIXME deve essere testo grigio questo!! IL COLORE importante
 	public static void printDebug(Object msg) {
 		if (checkVerbosity(0)) {
 			return;

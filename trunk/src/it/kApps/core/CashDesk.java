@@ -195,6 +195,8 @@ public class CashDesk {
 			JOptionPane.showMessageDialog(null, "Ordine andato a buon fine");
 			newClient();
 
+		} else if ("B".equals(text)) {
+			CashDeskFrame.setBanco();
 		} else if ("Ket".equals(text)) {
 			PRODS.add(new Product("Ketchup"));
 		} else if ("May".equals(text)) {

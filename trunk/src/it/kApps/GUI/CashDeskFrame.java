@@ -161,7 +161,7 @@ public class CashDeskFrame extends JInternalFrame {
 
 		WHERE_TO = new JComboBox();
 		WHERE_TO.addItem("SELEZIONA IL TAVOLO");
-		for (int i = 1; i < 30; i++) {
+		for (int i = 1; i < 40; i++) {
 			WHERE_TO.addItem("Tavolo n." + i);
 		}
 		WHERE_TO.addItem("AL BANCO");
@@ -186,7 +186,27 @@ public class CashDeskFrame extends JInternalFrame {
 		totalP.add(TOTAL);
 		
 		other.add(Box.createRigidArea(new Dimension(0, 10)));
-		other.add(WHERE_TO);
+		JPanel tavolo = new JPanel();
+		tavolo.setLayout(new BoxLayout(tavolo,BoxLayout.LINE_AXIS));
+		JButton banco = new JButton("B");
+		Dimension d = new Dimension(20, 20);
+		banco.setBackground(Color.WHITE);
+		banco.setFont(new Font("SansSerif",Font.BOLD,13));
+		banco.setMargin(new Insets(0,0,0,0));
+		banco.setOpaque(true);
+		banco.setPreferredSize(d);
+		banco.setMaximumSize(d);
+		banco.setSize(d);
+		banco.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				CashDeskFrame.convertButtonActionPerformed(evt);
+			}
+		});
+		tavolo.add(banco);
+		tavolo.add(Box.createRigidArea(new Dimension(5,0)));
+		tavolo.add(WHERE_TO);
+		other.add(tavolo);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
 		other.add(scroll);
 		other.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -200,7 +220,7 @@ public class CashDeskFrame extends JInternalFrame {
 		freeAndAddons.setLayout(new BoxLayout(freeAndAddons, BoxLayout.LINE_AXIS));
 
 		JButton ketchup = new JButton("Ket");
-		Dimension d = new Dimension(60, 40);
+		d = new Dimension(60, 40);
 		ketchup.setBackground(Color.WHITE);
 		ketchup.setOpaque(true);
 		ketchup.setPreferredSize(d);
@@ -515,6 +535,12 @@ public class CashDeskFrame extends JInternalFrame {
 
 	protected static void whereTo(ActionEvent evt) {
 		CashDesk.setWhereTo(WHERE_TO.getSelectedIndex());
+		repaintText();
+	}
+	
+	public static void setBanco(){
+		WHERE_TO.setSelectedItem("AL BANCO");
+		whereTo(null);
 		repaintText();
 	}
 
