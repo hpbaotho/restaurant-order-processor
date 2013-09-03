@@ -3,6 +3,7 @@ package it.kApps.GUI;
 import it.kApps.core.CashDesk;
 import it.kApps.core.Console;
 import it.kApps.core.Database;
+import it.kApps.core.Product;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.print.PrintService;
@@ -32,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -162,6 +165,62 @@ public class GUI {
 		intFrames.put("Console", intFrame);
 
 		return this.desktop;
+	}
+	/**
+	 * Display a standard message box
+	 * 
+	 * @param msg
+	 */
+	public static void showMessage(String msg) {
+		JOptionPane.showMessageDialog(mainFrame, msg, "Informazione", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public static ArrayList<String> showProductDialog(Product srv) {
+		ArrayList<String> ret = new ArrayList<String>();
+		JTextField name = new JTextField(15);
+		JTextField price = new JTextField(5);
+		JTextField cat = new JTextField(4);
+		JTextField ingr = new JTextField(5);
+		name.setText(srv.getName());
+		price.setText(srv.getPrice() + "");
+		cat.setText(srv.getCat() + "");
+		
+		JPanel p = new JPanel();
+		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+		JPanel pp = new JPanel();
+		pp.setLayout(new BoxLayout(pp, BoxLayout.LINE_AXIS));
+		
+		pp.add(new JLabel("Nome:"));
+		pp.add(Box.createHorizontalStrut(10));
+		pp.add(name);
+		
+		p.add(pp);
+		p.add(Box.createVerticalStrut(10)); // a spacer
+		
+		pp = new JPanel();
+		pp.setLayout(new BoxLayout(pp, BoxLayout.LINE_AXIS));
+		pp.add(new JLabel("Prezzo:"));
+		pp.add(Box.createHorizontalStrut(10));
+		pp.add(price);
+		pp.add(new JLabel("<html>&euro;cent</html>"));
+		pp.add(Box.createHorizontalStrut(20));
+		pp.add(new JLabel("Categoria:"));
+		pp.add(Box.createHorizontalStrut(10));
+		pp.add(cat);
+		
+		p.add(pp);
+		p.add(Box.createVerticalStrut(15));
+		
+		int result = JOptionPane.showConfirmDialog(mainFrame, p, "Inserisci i dati del nuovo servizio", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			ret.add(srv.getId() + "");
+			ret.add(name.getText());
+			ret.add(cat.getText());
+			ret.add(ingr.getText()+"..");
+			ret.add(price.getText());
+		}
+		return ret;
+		
 	}
 
 	/**
@@ -366,7 +425,12 @@ public class GUI {
 			return null;
 		}
 	}
-
+	/**
+	 * Show a window used to manage the services (edit and deleting)
+	 */
+	public static void showManageProductDialog() {
+		new ManageProducts(mainFrame);
+	}
 	/**
 	 * Handles the event from the menu
 	 * 
@@ -376,6 +440,10 @@ public class GUI {
 	public void menuAction(ActionEvent e) {
 		JMenuItem source = (JMenuItem) (e.getSource());
 		String action = source.getText();
+		System.out.println(action);
+		if ("Manage Products".equalsIgnoreCase(action)) {
+			GUI.showManageProductDialog();
+		}
 		if ("Set Printers".equals(action)) {
 			this.createPrinterPane();
 		}
@@ -408,7 +476,7 @@ public class GUI {
 				Console.println("[CashDesk] Error in handling database values");
 				// ###################
 			}
-			JOptionPane.showMessageDialog(null, "Il totale dall'inizio della festa �: " + (actual / 100.) + "0 Euro");
+			JOptionPane.showMessageDialog(null, "Il totale dall'inizio della festa e': " + (actual / 100.) + "0 Euro");
 			Database.disconnect();
 		}
 		if ("Start new day".equals(action)) {
