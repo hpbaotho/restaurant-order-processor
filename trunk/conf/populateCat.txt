@@ -1,6 +1,6 @@
-Panini
-Bibite
-Vini
-Cucina
-Fritto/Varie
-Dolci
+Panini!0
+Bibite!0
+Vini!0
+Cucina!0
+Fritto/Varie!0
+Dolci!0

@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Built-by: Gianmarco Laggia
 Implementation-Vendor: Gianmarco Laggia
 Implementation-Title: mh
-Implementation-Version: 3.0.201308300242
+Implementation-Version: 3.0.201309030436
 Specification-Vendor: Gianmarco Laggia
 Specification-Title: Pagoda Classes
-Created-By: 1.6 (Sun Microsystems Inc.)
+Created-By: 1.7 (Sun Microsystems Inc.)
 Specification-Version: 1.0
 Trusted-Only: true
 Class-path: hsqldb.jar

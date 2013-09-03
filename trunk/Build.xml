@@ -74,7 +74,7 @@
 	<target name="compile" depends="prepare" description="Compile Java sources">
 
 		<mkdir dir="${build}/classes" />
-		<javac srcdir="${src}" destdir="${build}/classes" encoding="8859_1" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+		<javac srcdir="${src}" destdir="${build}/classes" encoding="8859_1" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.7" target="1.7">
 			<classpath refid="compile.classpath" />
 		</javac>
 	</target>

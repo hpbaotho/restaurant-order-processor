@@ -54,6 +54,7 @@ public class CashDeskFrame extends JInternalFrame {
 	private static JLabel TOTAL;
 	private static JCheckBox				free;
 	private static StyledDocument DOC;
+	public static boolean blue = false;
 
 	/**
 	 * Main constructor, create the frame with each button for each product.
@@ -375,9 +376,11 @@ public class CashDeskFrame extends JInternalFrame {
 
 	private static void paintHeader() {
 		try {
-			//DOC.setParagraphAttributes(0, DOC.getLength(), DOC.getStyle("blue"), false);
+			if(blue){
+			DOC.setParagraphAttributes(0, DOC.getLength(), DOC.getStyle("blue"), false);
+			}
 			DOC.setLogicalStyle(DOC.getLength(), DOC.getStyle("center"));
-			DOC.insertString(DOC.getLength(), "FESTA CON NOI 2012\n", DOC.getStyle("regular"));
+			DOC.insertString(DOC.getLength(), "FESTA CON NOI 2013\n", DOC.getStyle("regular"));
 			DOC.insertString(DOC.getLength(), "Paninoteca Aladino\n", DOC.getStyle("aladino"));
 		} catch (BadLocationException e) {
 

@@ -275,6 +275,7 @@ public class Database {
 			}
 			return values;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			// ###### DEBUG ######
 			Console.println(CN + "Error asking the values list for " + table.toUpperCase());
 			// ###################
@@ -306,7 +307,47 @@ public class Database {
 			return false;
 		}
 	}
+	
+	/**
+	 * Edit an existing special field<br>
+	 * 
+	 * @param id
+	 *            The id of the field to edit
+	 * @param name
+	 *            The new name to set
+	 * @return True if all it's done, false if any <code>SQLException</code> is catched.
+	 */
+	public static boolean editProduct(int id, String name, int cat, String ingr, int price, int calledToday, int calledEver){
+			try {
+				connection.prepareStatement("UPDATE products SET name='" + name + "', cat='" + cat + "', ingr='" + ingr + "', price='" + price + "', calledToday='" + calledToday + "', calledEver='" + calledEver + "' WHERE id=" + id + ";").execute();
+				return true;
+			} catch (SQLException e) {
+				return false;
+			}
+	}
 
+	/**
+	 * This method return the list of all the special fields.
+	 * 
+	 * @return an <code>ArrayList&lt;String&gt;</code> of all the Special fields
+	 */
+	public static ArrayList<Product> listProducts() {
+		ArrayList<Product> specialFieldList = new ArrayList<Product>();
+		try {
+			ResultSet rs = connection.prepareStatement("SELECT * FROM products;").executeQuery();
+			while (!rs.isLast()) {
+				rs.next();
+				Product p = new Product(rs.getString("name"));
+				p.setPrice(rs.getInt("price"));
+				p.setCat(rs.getInt("cat"));
+				specialFieldList.add(p);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return specialFieldList;
+	}
 	public static void main(String[] args) {
 		//
 		// // 'Server' is a class of HSQLDB representing
